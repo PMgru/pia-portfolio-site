@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="100%" height="100%">
+  <defs>
+    <linearGradient id="ob-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F8EF7" />
+      <stop offset="100%" stop-color="#00D4FF" />
+    </linearGradient>
+  </defs>
+  <polygon points="25,8 41,17 41,35 25,44 9,35 9,17" fill="url(#ob-grad)" opacity="0.4" />
+  <polygon points="25,8 25,26 41,17" fill="url(#ob-grad)" />
+  <polygon points="25,26 25,44 41,35" fill="none" stroke="#F0F2F8" stroke-width="2" />
+  <polygon points="9,17 25,26 25,44 9,35 Z" fill="url(#ob-grad)" opacity="0.8" />
+  <polygon points="9,17 25,8 25,26 9,35 Z" fill="none" stroke="#F0F2F8" stroke-width="2" />
+  <text x="60" y="38" font-family="'Inter', 'Outfit', sans-serif" font-size="20" font-weight="900" fill="#F0F2F8">Out<tspan fill="#00D4FF">build</tspan></text>
+</svg>
