@@ -222,7 +222,6 @@ export default function HomePage() {
 
       {/* Background */}
 
-
       {/* Hero glow blobs */}
       <div style={{
         position: 'fixed', top: '10%', right: '5%',
@@ -236,13 +235,6 @@ export default function HomePage() {
         background: 'radial-gradient(circle, rgba(0,212,255,0.04) 0%, transparent 70%)',
         pointerEvents: 'none', zIndex: 0,
       }} />
-      return (
-  <>
-    <Head>
-      <meta name="google-site-verification" content="sFYTIBZr9VzQtdpZTRrxcdj8Z50dhuUmj95cQ2s2SP8" />
-    </Head>
-
-    <Navbar />
 
       <Navbar />
 
