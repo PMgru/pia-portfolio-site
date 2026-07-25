@@ -7,6 +7,9 @@ import CustomCursor from '@/components/CustomCursor';
 import Chatbot from '@/components/Chatbot';
 import GalaxyBackground from '@/components/GalaxyBackground';
 
+const GA_ID = 'G-L69Q08KSR9';
+const isProduction = process.env.NODE_ENV === 'production';
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const isAdmin = router.pathname.startsWith('/admin');
@@ -125,10 +128,13 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [router.pathname]);
 
   useEffect(() => {
+    if (!isProduction) return;
+
     const handleGtagPageView = (url: string) => {
       if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('config', 'G-L69Q08KSR9', {
+        (window as any).gtag('event', 'page_view', {
           page_path: url,
+          page_location: window.location.href,
         });
       }
     };
