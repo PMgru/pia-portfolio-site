@@ -183,6 +183,7 @@ export default function HomePage() {
     return () => { cancelled = true; };
   }, []);
 
+  
   // Audit tool state
   const [auditUrl, setAuditUrl] = useState('');
   const [auditLoading, setAuditLoading] = useState(false);
@@ -235,6 +236,13 @@ export default function HomePage() {
         background: 'radial-gradient(circle, rgba(0,212,255,0.04) 0%, transparent 70%)',
         pointerEvents: 'none', zIndex: 0,
       }} />
+      return (
+  <>
+    <Head>
+      <meta name="google-site-verification" content="sFYTIBZr9VzQtdpZTRrxcdj8Z50dhuUmj95cQ2s2SP8" />
+    </Head>
+
+    <Navbar />
 
       <Navbar />
 
