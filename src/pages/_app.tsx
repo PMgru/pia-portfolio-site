@@ -124,6 +124,21 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [router.pathname]);
 
+  useEffect(() => {
+    const handleGtagPageView = (url: string) => {
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('config', 'G-L69Q08KSR9', {
+          page_path: url,
+        });
+      }
+    };
+
+    router.events.on('routeChangeComplete', handleGtagPageView);
+    return () => {
+      router.events.off('routeChangeComplete', handleGtagPageView);
+    };
+  }, [router.events]);
+
   // Heartbeat ping to calculate session duration and live page activity
   useEffect(() => {
     if (router.pathname.startsWith('/admin')) return;
