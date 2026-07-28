@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 import {
   ArrowRight, TrendingUp, Search, BarChart2, Globe,
   Star, CheckCircle, ChevronRight, Play, Zap, Target,
@@ -211,14 +212,216 @@ export default function HomePage() {
     }
   };
 
+  // GEO & AEO Optimized Schema Definition
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://pialmahmud.com/#person",
+        "name": "Pial Mahmud",
+        "alternateName": ["Pial Mahmud SEO", "Pial Mahmud Digital Marketing"],
+        "url": "https://pialmahmud.com",
+        "image": {
+          "@type": "ImageObject",
+          "@id": "https://pialmahmud.com/#profileImage",
+          "url": "https://pialmahmud.com/uploads/profile-photo.png",
+          "caption": "Pial Mahmud - Digital Marketing & SEO Expert"
+        },
+        "jobTitle": "Digital Marketing & SEO Expert",
+        "description": "Pial Mahmud is a professional Digital Marketing & SEO Expert specializing in Technical SEO, Generative Engine Optimization (GEO), Answer Engine Optimization (AEO), AI Automation, Meta Ads, and Next.js Web Development.",
+        "sameAs": [
+          "https://github.com/PMgru",
+          "https://www.linkedin.com/in/pial-mahmud-",
+          "https://twitter.com/pialmahmud",
+          "https://www.facebook.com/pialmahmud",
+          "https://www.youtube.com/@pialmahmud"
+        ],
+        "knowsAbout": [
+          "Search Engine Optimization (SEO)",
+          "Generative Engine Optimization (GEO)",
+          "Answer Engine Optimization (AEO)",
+          "Technical SEO & Core Web Vitals",
+          "Programmatic SEO",
+          "AI Search Optimization (ChatGPT, Perplexity, Gemini, Google AI Overviews)",
+          "Digital Marketing Strategy",
+          "Meta Ads & Performance Marketing",
+          "Next.js & React Web Development",
+          "Conversion Rate Optimization (CRO)",
+          "AI Chatbot Training & Integration"
+        ],
+        "knowsLanguage": ["English", "Bengali"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "email": "contact@pialmahmud.com",
+          "availableLanguage": ["English", "Bengali"]
+        }
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://pialmahmud.com/#service",
+        "name": "Pial Mahmud - Digital Marketing & SEO Services",
+        "url": "https://pialmahmud.com",
+        "logo": "https://pialmahmud.com/uploads/logo.png",
+        "image": "https://pialmahmud.com/uploads/profile-photo.png",
+        "description": "Premium Digital Marketing, Technical SEO, GEO & AEO Optimization, and Next.js Development services engineered for maximum organic visibility and AI search engine ranking.",
+        "provider": {
+          "@id": "https://pialmahmud.com/#person"
+        },
+        "areaServed": {
+          "@type": "AdministrativeArea",
+          "name": "Global"
+        },
+        "priceRange": "$$",
+        "currenciesAccepted": "USD",
+        "paymentAccepted": "Credit Card, Wire Transfer, PayPal",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "reviewCount": "50",
+          "bestRating": "5",
+          "worstRating": "1"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "SEO & Growth Marketing Services",
+          "itemListElement": [
+            {
+              "@type": "OfferCatalog",
+              "name": "Generative Engine Optimization (GEO)",
+              "itemListElement": [
+                {
+                  "@type": "Service",
+                  "name": "GEO & AI Search Engine Ranking",
+                  "description": "Optimizing entity signals, citations, and semantic structured data for ChatGPT Search, Perplexity AI, Google AI Overviews, and Gemini."
+                }
+              ]
+            },
+            {
+              "@type": "OfferCatalog",
+              "name": "Technical & Programmatic SEO",
+              "itemListElement": [
+                {
+                  "@type": "Service",
+                  "name": "Technical SEO & Speed Audit",
+                  "description": "Core Web Vitals optimization, site architecture refinement, indexing fixes, and programmatic page scaling."
+                }
+              ]
+            },
+            {
+              "@type": "OfferCatalog",
+              "name": "Next.js Web Development",
+              "itemListElement": [
+                {
+                  "@type": "Service",
+                  "name": "High-Performance Web Applications",
+                  "description": "Custom Next.js web application design optimized for lightning-fast loading speeds, accessibility, and SEO."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://pialmahmud.com/#website",
+        "url": "https://pialmahmud.com",
+        "name": "Pial Mahmud | Digital Marketing & SEO Expert",
+        "description": "Official Portfolio & Strategic Growth Hub of Pial Mahmud",
+        "publisher": {
+          "@id": "https://pialmahmud.com/#person"
+        },
+        "inLanguage": "en-US",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://pialmahmud.com/blog?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": "https://pialmahmud.com/#profilepage",
+        "url": "https://pialmahmud.com",
+        "name": "Pial Mahmud Official Profile",
+        "mainEntity": {
+          "@id": "https://pialmahmud.com/#person"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://pialmahmud.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Who is Pial Mahmud?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Pial Mahmud is a professional Digital Marketing & SEO Expert specializing in Technical SEO, Generative Engine Optimization (GEO), Answer Engine Optimization (AEO), AI Automation, Meta Ads performance marketing, and modern Next.js web development."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is Generative Engine Optimization (GEO) and Answer Engine Optimization (AEO)?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Generative Engine Optimization (GEO) and Answer Engine Optimization (AEO) are modern search optimization frameworks designed to ensure brands and websites rank, get cited, and appear as authoritative sources in AI search engines such as ChatGPT Search, Perplexity AI, Google AI Overviews (SGE), and Claude."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What digital marketing and SEO services does Pial Mahmud offer?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Pial Mahmud provides end-to-end digital growth services including: 1) Technical & Core Web Vitals SEO, 2) GEO & AEO AI Search Optimization, 3) Programmatic SEO & Content Strategy, 4) High-ROI Meta Ads & Performance Marketing, 5) Custom Next.js Web Development, and 6) AI Chatbot Training & Marketing Automation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does Pial Mahmud help websites rank on AI search engines like ChatGPT and Perplexity?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Pial Mahmud utilizes advanced entity mapping, JSON-LD structured schema graphs, semantic content structuring, authoritative citation building, and direct answer formatting tailored to LLM retrieval algorithms and RAG (Retrieval-Augmented Generation) systems."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is Next.js development important for modern Technical SEO?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Next.js enables Server-Side Rendering (SSR) and Static Site Generation (SSG), ensuring search engine crawlers and AI bots can instantly parse pre-rendered HTML, achieve top Core Web Vitals scores, and maximize crawl budget efficiency."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What results can clients expect when working with Pial Mahmud?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Clients typically experience dramatic organic traffic growth (up to 400%+), improved search engine rankings for competitive commercial terms, appearance in AI search overviews, reduced cost-per-acquisition (CPA) on ads, and higher conversion rates."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How can I hire Pial Mahmud for a project or consult with him?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can contact Pial Mahmud directly through his official portfolio website at https://pialmahmud.com/contact or send an inquiry via email to schedule a discovery call and free initial SEO/Marketing audit."
+            }
+          }
+        ]
+      }
+    ]
+  };
+
   return (
     <>
-      <Head>
-        <title>Pial Mahmud — AI-Powered Digital Marketing & SEO Expert</title>
-        <meta name="description" content="Pial Mahmud is a top-tier Digital Marketing & SEO Expert helping brands grow with AI-powered strategies, organic traffic, and high-converting campaigns." />
-        <meta property="og:title" content="Pial Mahmud — Digital Marketing & SEO Expert" />
-        <meta property="og:description" content="Premium digital marketing services backed by data, AI, and years of expertise." />
-      </Head>
+      <SEO
+        slug="home"
+        fallbackTitle="Pial Mahmud — AI-Powered Digital Marketing & SEO Expert"
+        fallbackDescription="Pial Mahmud is a top-tier Digital Marketing & SEO Expert helping brands grow with AI-powered strategies, organic traffic, and high-converting campaigns."
+        fallbackKeywords="Pial Mahmud, Digital Marketing Expert, SEO Expert, GEO, AEO, Technical SEO, Next.js Development, Meta Ads"
+        schema={schemaData}
+      />
 
       {/* Background */}
 

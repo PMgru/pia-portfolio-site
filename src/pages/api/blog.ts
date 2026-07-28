@@ -31,17 +31,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!requireAdmin(req, res)) return;
 
   if (req.method === 'POST') {
-    const { title, excerpt, content, category, tags, focus_keyword, meta_title, meta_description, featured_image } = req.body;
-
-    // Create friendly slug from title
-    const generatedSlug = (title || 'blog-post')
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
+    const { title, excerpt, content, category, tags, focus_keyword, meta_title, meta_description, featured_image, featured_image_alt, slug } = req.body;
+    const postSlug = slug && typeof slug === 'string' && slug.trim()
+      ? normalizeSlug(slug)
+      : normalizeSlug(title || 'blog-post');
 
     const newPost = JsonDb.insert('blog_posts', {
       title,
-      slug: generatedSlug,
+      slug: postSlug,
       excerpt,
       // Sanitize authored HTML before persisting to prevent stored XSS.
       content: content ? sanitizeHtml(content) : '',
@@ -51,6 +48,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       meta_title: meta_title || '',
       meta_description: meta_description || '',
       featured_image: featured_image || '',
+      featured_image_alt: featured_image_alt || '',
       seo_score: 80, // Baseline default
       views: 0,
       is_published: true
@@ -65,6 +63,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Sanitize incoming content if present.
     const payload = { ...req.body };
     if (typeof payload.content === 'string') payload.content = sanitizeHtml(payload.content);
+    if (typeof payload.slug === 'string' && payload.slug.trim()) {
+      payload.slug = normalizeSlug(payload.slug);
+    } else {
+      delete payload.slug;
+    }
     const success = JsonDb.update('blog_posts', id, payload);
     if (!success) return res.status(404).json({ message: 'Blog post not found' });
     return res.status(200).json({ message: 'Blog updated successfully' });
@@ -80,4 +83,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   return res.status(405).json({ message: 'Method Not Allowed' });
+}
+
+function normalizeSlug(value: unknown) {
+  if (typeof value !== 'string') return '';
+  return value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }

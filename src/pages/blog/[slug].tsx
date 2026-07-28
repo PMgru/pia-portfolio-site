@@ -18,6 +18,8 @@ interface PostDetail {
   meta_title: string;
   meta_description: string;
   views: number;
+  featured_image?: string;
+  featured_image_alt?: string;
 }
 
 export default function BlogDetail() {
@@ -79,8 +81,37 @@ export default function BlogDetail() {
   return (
     <>
       <Head>
-        <title>{post.meta_title || post.title}</title>
+        <title>{post.meta_title || `${post.title} | Pial Mahmud Blog`}</title>
         <meta name="description" content={post.meta_description || post.excerpt} />
+        <meta name="keywords" content={post.tags?.join(', ') || 'SEO Strategy, GEO, AEO, Pial Mahmud'} />
+        <link rel="canonical" href={`https://pialmahmud.com/blog/${slug}`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://pialmahmud.com/blog/${slug}`} />
+        <meta property="og:title" content={post.meta_title || post.title} />
+        <meta property="og:description" content={post.meta_description || post.excerpt} />
+        <meta property="og:image" content={post.featured_image ? (post.featured_image.startsWith('http') ? post.featured_image : `https://pialmahmud.com${post.featured_image}`) : 'https://pialmahmud.com/images/og-home.jpg'} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.meta_title || post.title} />
+        <meta name="twitter:description" content={post.meta_description || post.excerpt} />
+        <meta name="twitter:image" content={post.featured_image ? (post.featured_image.startsWith('http') ? post.featured_image : `https://pialmahmud.com${post.featured_image}`) : 'https://pialmahmud.com/images/og-home.jpg'} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BlogPosting",
+              "headline": post.title,
+              "description": post.excerpt,
+              "image": post.featured_image ? [post.featured_image] : ["https://pialmahmud.com/images/og-home.jpg"],
+              "datePublished": post.created_at,
+              "author": {
+                "@type": "Person",
+                "name": "Pial Mahmud",
+                "url": "https://pialmahmud.com"
+              }
+            })
+          }}
+        />
       </Head>
 
       <div className="min-h-screen bg-[#0A0A0F] text-white flex flex-col justify-between overflow-x-hidden font-body">
@@ -114,6 +145,16 @@ export default function BlogDetail() {
             </div>
 
           </div>
+
+          {post.featured_image && (
+            <div className="overflow-hidden rounded-[2rem] border border-white/10">
+              <img
+                src={post.featured_image}
+                alt={post.featured_image_alt || post.title}
+                className="w-full h-auto object-cover"
+              />
+            </div>
+          )}
 
           {/* Article HTML Content */}
           <article 

@@ -76,7 +76,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         const res = await fetch('/api/chatbot?action=ask', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question: `You are an internal admin onboarding guide. Answer this: ${userText}`, history: messages.slice(-4) })
+          body: JSON.stringify({ question: `You are an internal admin onboarding guide. Answer this: ${userText}`, history: messages.slice(-4), openrouter_api_key: localStorage.getItem('NEXT_PUBLIC_OPENROUTER_API_KEY') || undefined })
         });
         const data = await res.json();
         answer = data.answer;

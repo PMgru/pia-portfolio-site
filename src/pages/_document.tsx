@@ -7,8 +7,9 @@ export default function Document() {
     <Html lang="en" className="dark scroll-smooth">
       <Head>
         {/* Custom font and analytics placeholders */}
-        <meta name="google-site-verification" content="sFYTIBZr9VzQtdpZTRrxcdj8Z50dhuUmj95cQ2s2SP8" />
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
         <script
           dangerouslySetInnerHTML={{

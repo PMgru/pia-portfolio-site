@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 import { ArrowRight, TrendingUp } from 'lucide-react';
 
 const DEFAULT_CASE_STUDIES = [
@@ -141,10 +142,12 @@ export default function CaseStudiesPage() {
 
   return (
     <>
-      <Head>
-        <title>Case Studies — Pial Mahmud Digital Marketing Results</title>
-        <meta name="description" content="Explore real case studies and proven results from Pial Mahmud's digital marketing and SEO campaigns for brands across multiple industries." />
-      </Head>
+      <SEO
+        slug="case-studies"
+        fallbackTitle="Case Studies — Proven SEO & Digital Marketing Results | Pial Mahmud"
+        fallbackDescription="Real campaigns. Real results. Explore case studies showing 400%+ traffic growth, high ROAS, and measurable ROI across EdTech, Real Estate, and Tech industries."
+        fallbackKeywords="SEO Case Studies, Digital Marketing Results, Organic Traffic Growth, SEO ROI"
+      />
 
       <div style={{ background: '#080B14', minHeight: '100vh' }}>
         <div className="grid-overlay" />

@@ -41,7 +41,7 @@ export default function Chatbot() {
       const res = await fetch('/api/chatbot?action=ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: textToSend, history: messages.slice(-6) })
+        body: JSON.stringify({ question: textToSend, history: messages.slice(-6), openrouter_api_key: localStorage.getItem('NEXT_PUBLIC_OPENROUTER_API_KEY') || undefined })
       });
       const data = await res.json();
       setMessages(prev => [...prev, { sender: 'bot', text: data.answer }]);

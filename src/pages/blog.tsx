@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Search, Calendar, Clock, User, ArrowRight, ArrowLeft } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 
 interface Post {
   id: string;
@@ -57,10 +58,12 @@ export default function Blog() {
 
   return (
     <>
-      <Head>
-        <title>Insights & SEO Strategies | Pial Mahmud Blog</title>
-        <meta name="description" content="Discover semantic search tricks, conversion psychology hacks, and AI workflows written by SEO expert Pial Mahmud." />
-      </Head>
+      <SEO
+        slug="blog"
+        fallbackTitle="Insights & SEO Strategies | Pial Mahmud Blog"
+        fallbackDescription="Discover semantic search tricks, GEO & AEO optimization, conversion psychology hacks, and AI workflows written by SEO expert Pial Mahmud."
+        fallbackKeywords="SEO Blog, GEO Guide, AEO Strategies, Technical SEO Insights, Digital Marketing Articles"
+      />
 
       <div className="min-h-screen bg-[#0A0A0F] text-white flex flex-col justify-between overflow-x-hidden">
         

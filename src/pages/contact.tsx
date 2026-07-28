@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 import { Mail, Phone, MapPin, Send, Clock, MessageSquare, Linkedin, Twitter, Instagram } from 'lucide-react';
 
 // services and budgets loaded dynamically from admin settings
@@ -101,10 +102,12 @@ export default function ContactPage() {
 
   return (
     <>
-      <Head>
-        <title>Contact Pial Mahmud — Let's Grow Your Business Together</title>
-        <meta name="description" content="Get in touch with Pial Mahmud for digital marketing, SEO, and AI-powered growth strategies. Free consultation available." />
-      </Head>
+      <SEO
+        slug="contact"
+        fallbackTitle="Contact Pial Mahmud — Start Your Growth Journey Today"
+        fallbackDescription="Get in touch with Pial Mahmud for digital marketing, SEO, and AI-powered growth strategies. Free consultation, 24-hour response time."
+        fallbackKeywords="Hire SEO Expert, Digital Marketing Consultation, Technical SEO Audit Request, Contact Pial Mahmud"
+      />
 
       <div style={{ background: '#080B14', minHeight: '100vh' }}>
         <div className="grid-overlay" />

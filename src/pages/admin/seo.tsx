@@ -14,6 +14,7 @@ import { sanitizeHtml } from '@/lib/sanitize';
 interface SeoTarget {
   kind: 'page' | 'project' | 'blog';
   id: string;
+  slug?: string;
   title: string;
   subtitle: string;
   meta_title: string;
@@ -87,10 +88,12 @@ export default function SeoCenter() {
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDesc, setMetaDesc] = useState('');
   const [focusKeyword, setFocusKeyword] = useState('');
+  const [slug, setSlug] = useState('');
   const [content, setContent] = useState('');
 
   const selectTarget = (t: SeoTarget) => {
     setActiveId(t.id);
+    setSlug(t.slug || '');
     setMetaTitle(t.meta_title);
     setMetaDesc(t.meta_description);
     setFocusKeyword(t.focus_keyword);
@@ -106,9 +109,9 @@ export default function SeoCenter() {
       ]);
 
       const mapped: SeoTarget[] = [
-        ...pagesRes.map((p: any) => ({ kind: 'page' as const, id: p.id, title: p.title || p.slug, subtitle: `/${p.slug === 'home' ? '' : p.slug}`, meta_title: p.meta_title || '', meta_description: p.meta_description || '', focus_keyword: p.focus_keyword || '', content: p.content || '' })),
-        ...projectsRes.map((p: any) => ({ kind: 'project' as const, id: p.id, title: p.title, subtitle: p.client || 'Case Study', meta_title: p.meta_title || '', meta_description: p.meta_description || '', focus_keyword: p.focus_keyword || '', content: `${p.challenge || ''} ${p.solution || ''} ${p.results || ''}` })),
-        ...blogRes.map((b: any) => ({ kind: 'blog' as const, id: b.id, title: b.title, subtitle: `/${b.slug}`, meta_title: b.meta_title || '', meta_description: b.meta_description || '', focus_keyword: b.focus_keyword || '', content: b.content || '' })),
+        ...pagesRes.map((p: any) => ({ kind: 'page' as const, id: p.id, slug: p.slug, title: p.title || p.slug, subtitle: `/${p.slug === 'home' ? '' : p.slug}`, meta_title: p.meta_title || '', meta_description: p.meta_description || '', focus_keyword: p.focus_keyword || '', content: p.content || '' })),
+        ...projectsRes.map((p: any) => ({ kind: 'project' as const, id: p.id, slug: p.slug || p.case_study, title: p.title, subtitle: p.client || 'Case Study', meta_title: p.meta_title || '', meta_description: p.meta_description || '', focus_keyword: p.focus_keyword || '', content: `${p.challenge || ''} ${p.solution || ''} ${p.results || ''}` })),
+        ...blogRes.map((b: any) => ({ kind: 'blog' as const, id: b.id, slug: b.slug, title: b.title, subtitle: `/${b.slug}`, meta_title: b.meta_title || '', meta_description: b.meta_description || '', focus_keyword: b.focus_keyword || '', content: b.content || '' })),
       ];
       setTargets(mapped);
       if (mapped.length && !activeId) selectTarget(mapped[0]);
@@ -146,7 +149,7 @@ export default function SeoCenter() {
       const res = await fetch('/api/ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'seo_meta', content: content || active?.title || '', context: focusKeyword }),
+        body: JSON.stringify({ type: 'seo_meta', content: content || active?.title || '', context: focusKeyword, openrouter_api_key: localStorage.getItem('NEXT_PUBLIC_OPENROUTER_API_KEY') || undefined }),
       });
       const data = await res.json();
       const meta = JSON.parse(data.result);
@@ -164,6 +167,7 @@ export default function SeoCenter() {
     if (!active) return;
     setSaving(true);
     const payload = {
+      slug: slug,
       meta_title: metaTitle,
       meta_description: metaDesc,
       focus_keyword: focusKeyword,
@@ -177,7 +181,7 @@ export default function SeoCenter() {
       } else if (active.kind === 'blog') {
         res = await fetch(`/api/blog?id=${active.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       } else {
-        res = await fetch(`/api/projects?id=${active.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ meta_title: metaTitle, meta_description: metaDesc, focus_keyword: focusKeyword }) });
+        res = await fetch(`/api/projects?id=${active.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slug: slug, meta_title: metaTitle, meta_description: metaDesc, focus_keyword: focusKeyword }) });
       }
       if (res.ok) {
         toast.success('SEO saved & live!', { style: { background: '#121218', color: '#F4F4F9' } });
@@ -295,12 +299,18 @@ export default function SeoCenter() {
                       className="w-full bg-[#121218] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#C9A84C] resize-none" />
                   </div>
 
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] uppercase font-bold tracking-wider text-[#9A8F95]">Permalink Slug</label>
+                    <input value={slug} onChange={e => setSlug(e.target.value)} placeholder="e.g. service-audit"
+                      className="w-full bg-[#121218] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#C9A84C]" />
+                    <p className="text-[10px] text-[#6B7A99]">Leave blank to preserve the existing permalink.</p>
+                  </div>
                   {/* Content (editable only for pages/blog) */}
                   {(active.kind === 'page' || active.kind === 'blog') && (
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[10px] uppercase font-bold tracking-wider text-[#9A8F95]">Content (HTML) — drives keyword density & headings</label>
                       <textarea value={content} onChange={e => setContent(e.target.value)} rows={5} placeholder="<h2>...</h2><p>...</p>"
-                        className="w-full bg-[#121218] border border-white/10 rounded-xl px-4 py-3 text-xs text-white font-mono focus:outline-none focus:border-[#C9A84C] resize-none" />
+                        className="w-full bg-[#121218] border border-white/10 rounded-xl px-4 py-3 text-xs text-white font-mono focus:outline-none focus:border-[#C9A8C] resize-none" />
                     </div>
                   )}
                   {active.kind === 'project' && (

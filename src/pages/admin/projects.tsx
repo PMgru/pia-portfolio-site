@@ -43,6 +43,8 @@ export default function ProjectsCms() {
   const [solution, setSolution] = useState('');
   const [results, setResults] = useState('');
   const [techString, setTechString] = useState('');
+  const [slug, setSlug] = useState('');
+  const [imageAlt, setImageAlt] = useState('');
   const [metricKey1, setMetricKey1] = useState('traffic_growth');
   const [metricVal1, setMetricVal1] = useState('340%');
   const [metricKey2, setMetricKey2] = useState('cac_reduction');
@@ -127,6 +129,8 @@ export default function ProjectsCms() {
     setChallenge(p.challenge || '');
     setSolution(p.solution || '');
     setResults(p.results || '');
+    setSlug((p as any).slug || '');
+    setImageAlt((p as any).image_alt || '');
     setTechString(p.technologies?.join(', ') || '');
     setImageUrl(p.image || '');
     
@@ -166,8 +170,10 @@ export default function ProjectsCms() {
       technologies,
       impact_metrics,
       image: imageUrl || '/images/placeholder.jpg',
+      image_alt: imageAlt,
       featured: true,
-      case_study: title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      slug: slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      case_study: slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
     };
 
     try {
@@ -224,6 +230,8 @@ export default function ProjectsCms() {
     setMetricVal1('');
     setMetricKey2('cac_reduction');
     setMetricVal2('');
+    setSlug('');
+    setImageAlt('');
     setImageUrl('');
     setShowEditor(false);
   };
@@ -280,6 +288,29 @@ export default function ProjectsCms() {
                   placeholder="e.g. Gloria Tech - 340% Traffic Growth"
                   className="w-full bg-[#121218] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#B76E79]"
                   required
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-[#9A8F95]">Permalink Slug</label>
+                <input
+                  type="text"
+                  value={slug}
+                  onChange={(e) => setSlug(e.target.value)}
+                  placeholder="e.g. gloria-tech-seo-growth"
+                  className="w-full bg-[#121218] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#B76E79]"
+                />
+                <p className="text-[10px] text-[#6B7A99]">Leave blank to auto-generate from the title.</p>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-[#9A8F95]">Cover Image Alt Text</label>
+                <input
+                  type="text"
+                  value={imageAlt}
+                  onChange={(e) => setImageAlt(e.target.value)}
+                  placeholder="Describe the image for accessibility and SEO"
+                  className="w-full bg-[#121218] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#B76E79]"
                 />
               </div>
 

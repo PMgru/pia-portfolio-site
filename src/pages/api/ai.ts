@@ -14,16 +14,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // Only authenticated admins can trigger AI generation (it spends quota).
   if (!requireAdmin(req, res)) return;
-  const _keyUsed = OPENROUTER_API_KEY; // referenced to keep the env read explicit
 
-  const { type, content, context } = req.body;
+  const { type, content, context, openrouter_api_key } = req.body;
+  const requestKey = typeof openrouter_api_key === 'string' && openrouter_api_key.trim()
+    ? openrouter_api_key.trim()
+    : '';
+  const apiKey = requestKey || OPENROUTER_API_KEY;
 
   if (!type) {
     return res.status(400).json({ message: 'Missing generation type' });
   }
 
   // 1. Try to fetch from LLM if API Key is present
-  if (OPENROUTER_API_KEY && OPENROUTER_API_KEY !== 'undefined') {
+  if (apiKey && apiKey !== 'undefined') {
     try {
       let prompt = '';
       if (type === 'seo_meta') {
@@ -48,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
         {
           headers: {
-            'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+            'Authorization': `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
           },
           timeout: 7000,

@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 import { ArrowRight, CheckCircle, ChevronRight, Zap } from 'lucide-react';
 
 // services loaded from API
@@ -75,10 +76,12 @@ export default function ServicesPage() {
 
   return (
     <>
-      <Head>
-        <title>Services — Pial Mahmud Digital Marketing & SEO</title>
-        <meta name="description" content="Explore Pial Mahmud's premium digital marketing services including SEO, AI marketing, content strategy, and full-funnel campaign management." />
-      </Head>
+      <SEO
+        slug="services"
+        fallbackTitle="Digital Marketing & SEO Services — Pial Mahmud"
+        fallbackDescription="Explore Pial Mahmud's premium digital marketing services including Technical SEO, GEO & AEO AI search optimization, PPC, and Next.js Web Development."
+        fallbackKeywords="SEO Services, Generative Engine Optimization, Technical SEO Audit, Meta Ads, Next.js Web Development"
+      />
 
       <div style={{ background: '#080B14', minHeight: '100vh' }}>
         <div className="grid-overlay" />

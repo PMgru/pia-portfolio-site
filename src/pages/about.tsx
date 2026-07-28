@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 import toast, { Toaster } from 'react-hot-toast';
 import { ArrowRight, Download, CheckCircle, Award, BookOpen, Briefcase } from 'lucide-react';
 
@@ -17,6 +18,7 @@ export default function AboutPage() {
   // Start with empty string — no image is shown until API responds
   // This prevents the wrong/local fallback path from firing onError before we know the real URL
   const [profileImage, setProfileImage] = useState('');
+  const [profileImageAlt, setProfileImageAlt] = useState('Pial Mahmud — Digital Marketing Expert');
   const [imageError, setImageError] = useState(false);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [skills, setSkills] = useState<{name: string, level: number}[]>([]);
@@ -56,6 +58,7 @@ export default function AboutPage() {
           // Always set profileImage from API — even if empty string,
           // so we don't render a broken local path
           setProfileImage(s.profile_image || '');
+          if (s.profile_image_alt_text) setProfileImageAlt(s.profile_image_alt_text);
           setImageError(false); // reset on fresh data
           if (s.about_title) setAboutTitle(s.about_title);
           if (s.about_intro) setAboutIntro(s.about_intro);
@@ -91,10 +94,12 @@ export default function AboutPage() {
 
   return (
     <>
-      <Head>
-        <title>About Pial Mahmud — AI-Powered Digital Marketing Expert</title>
-        <meta name="description" content="Learn about Pial Mahmud — a top-tier digital marketing and SEO expert with 5+ years of experience driving exceptional growth for global brands." />
-      </Head>
+      <SEO
+        slug="about"
+        fallbackTitle="About Pial Mahmud — AI-Powered Digital Marketing Expert"
+        fallbackDescription="Learn about Pial Mahmud — a top-tier digital marketing and SEO expert with 5+ years of experience driving exceptional growth for global brands."
+        fallbackKeywords="About Pial Mahmud, Digital Marketing Expert, Technical SEO Specialist, Bangladesh SEO Consultant"
+      />
 
       <div style={{ background: '#080B14', minHeight: '100vh' }}>
         <Toaster position="top-right" />
@@ -133,7 +138,7 @@ export default function AboutPage() {
                         <img
                           key={profileImage}
                           src={profileImage}
-                          alt="Pial Mahmud"
+                          alt={profileImageAlt || 'Pial Mahmud'}
                           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
                           onError={() => setImageError(true)}
                         />

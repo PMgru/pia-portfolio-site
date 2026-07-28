@@ -137,11 +137,17 @@ export default function CaseStudyDetail() {
       <Head>
         <title>{cs.meta_title || `${cs.title} — Case Study | Pial Mahmud`}</title>
         <meta name="description" content={cs.meta_description || cs.description || `Read the full ${cs.client} case study: ${cs.title}.`} />
-        {cs.focus_keyword && <meta name="keywords" content={cs.focus_keyword} />}
+        <meta name="keywords" content={cs.focus_keyword || `${cs.client} SEO, Case Study, Organic Growth, Pial Mahmud`} />
+        <link rel="canonical" href={`https://pialmahmud.com/case-studies/${cs.slug}`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://pialmahmud.com/case-studies/${cs.slug}`} />
         <meta property="og:title" content={cs.meta_title || cs.title} />
         <meta property="og:description" content={cs.meta_description || cs.description} />
-        <meta property="og:type" content="article" />
-        <link rel="canonical" href={`/case-studies/${cs.slug}`} />
+        <meta property="og:image" content={cs.image ? (cs.image.startsWith('http') ? cs.image : `https://pialmahmud.com${cs.image}`) : 'https://pialmahmud.com/images/og-home.jpg'} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={cs.meta_title || cs.title} />
+        <meta name="twitter:description" content={cs.meta_description || cs.description} />
+        <meta name="twitter:image" content={cs.image ? (cs.image.startsWith('http') ? cs.image : `https://pialmahmud.com${cs.image}`) : 'https://pialmahmud.com/images/og-home.jpg'} />
       </Head>
 
       <div style={{ background: '#080B14', minHeight: '100vh' }}>

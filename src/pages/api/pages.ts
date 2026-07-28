@@ -24,7 +24,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === 'PUT' || req.method === 'POST') {
     const { id, title, meta_title, meta_description, focus_keyword, content } = req.body;
-    if (!id && !slug) return res.status(400).json({ message: 'Missing page identifiers' });
+    const payloadSlug = req.body?.slug;
+    if (!id && !slug && !payloadSlug) return res.status(400).json({ message: 'Missing page identifiers' });
 
     const pages = JsonDb.getCollection('pages');
     const pageId = id || pages.find(p => p.slug === slug)?.id;
@@ -32,6 +33,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!pageId) {
       // Insert new page
       const insertPayload = { ...req.body };
+      if (!insertPayload.slug && insertPayload.title) {
+        insertPayload.slug = sanitizeSlug(insertPayload.title);
+      }
       if (typeof insertPayload.content === 'string') insertPayload.content = sanitizeHtml(insertPayload.content);
       const newPage = JsonDb.insert('pages', insertPayload);
       return res.status(201).json(newPage);
@@ -45,6 +49,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Build the updated page fields, preserving existing values for unspecified fields
     const updatedFields = {
       title: title !== undefined ? title : existingPage?.title,
+      slug: typeof payloadSlug === 'string'
+        ? (payloadSlug.trim() ? sanitizeSlug(payloadSlug) : existingPage?.slug)
+        : existingPage?.slug,
       meta_title: meta_title !== undefined ? meta_title : existingPage?.meta_title,
       meta_description: meta_description !== undefined ? meta_description : existingPage?.meta_description,
       focus_keyword: focus_keyword !== undefined ? focus_keyword : existingPage?.focus_keyword,
@@ -68,7 +75,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   return res.status(455).json({ message: 'Method Not Allowed' });
 }
 
-// Live SEO Score calculation logic
+function sanitizeSlug(slug: unknown) {
+  if (typeof slug !== 'string') return '';
+  return slug.trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
 function calculateSEOScore(page: any): number {
   let score = 0;
 

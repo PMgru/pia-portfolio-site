@@ -35,10 +35,12 @@ export default function BlogCms() {
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('SEO');
+  const [slug, setSlug] = useState('');
   const [focusKeyword, setFocusKeyword] = useState('');
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDesc, setMetaDesc] = useState('');
   const [tagsString, setTagsString] = useState('');
+  const [featuredImageAlt, setFeaturedImageAlt] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showEditor, setShowEditor] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
@@ -165,7 +167,7 @@ export default function BlogCms() {
       const res = await fetch('/api/ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'generate_blog', content: title, context: focusKeyword || title }),
+        body: JSON.stringify({ type: 'generate_blog', content: title, context: focusKeyword || title, openrouter_api_key: localStorage.getItem('NEXT_PUBLIC_OPENROUTER_API_KEY') || undefined }),
       });
       const data = await res.json();
       setContent(data.result);
@@ -179,6 +181,7 @@ export default function BlogCms() {
 
   const handleEdit = (p: Post) => {
     setEditingId(p.id);
+    setSlug(p.slug || '');
     setTitle(p.title || '');
     setExcerpt(p.excerpt || '');
     setContent(p.content || '');
@@ -188,6 +191,7 @@ export default function BlogCms() {
     setMetaDesc(p.meta_description || '');
     setTagsString(p.tags?.join(', ') || '');
     setFeaturedImage((p as any).featured_image || '');
+    setFeaturedImageAlt((p as any).featured_image_alt || '');
     setShowEditor(true);
   };
 
@@ -199,6 +203,7 @@ export default function BlogCms() {
 
     const payload = {
       title,
+      slug,
       excerpt,
       content,
       category,
@@ -206,7 +211,8 @@ export default function BlogCms() {
       meta_title: metaTitle || title,
       meta_description: metaDesc || excerpt,
       tags,
-      featured_image: featuredImage
+      featured_image: featuredImage,
+      featured_image_alt: featuredImageAlt
     };
 
     try {
@@ -257,11 +263,14 @@ export default function BlogCms() {
     setExcerpt('');
     setContent('');
     setCategory('SEO');
+    setSlug('');
     setFocusKeyword('');
     setMetaTitle('');
     setMetaDesc('');
     setTagsString('');
     setFeaturedImage('');
+    setFeaturedImageAlt('');
+    setContentTab('write');
     setShowEditor(false);
   };
 
@@ -318,6 +327,19 @@ export default function BlogCms() {
                   className="w-full bg-[#121218] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#B76E79]"
                   required
                 />
+              </div>
+
+              {/* Permalink / Slug */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-[#9A8F95]">Permalink Slug</label>
+                <input
+                  type="text"
+                  value={slug}
+                  onChange={(e) => setSlug(e.target.value)}
+                  placeholder="e.g. master-search-intent-clusters"
+                  className="w-full bg-[#121218] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#B76E79]"
+                />
+                <p className="text-[10px] text-[#6B7A99]">Leave empty to auto-generate from the title.</p>
               </div>
 
               {/* Excerpt */}
@@ -473,6 +495,16 @@ export default function BlogCms() {
                 <h4 className="text-[10px] uppercase font-bold tracking-wider text-[#B76E79] flex items-center gap-2">
                   <ImagePlus className="w-3.5 h-3.5" /> Featured Image
                 </h4>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] uppercase font-bold tracking-wider text-[#9A8F95]">Featured Image Alt Text</label>
+                  <input
+                    type="text"
+                    value={featuredImageAlt}
+                    onChange={(e) => setFeaturedImageAlt(e.target.value)}
+                    placeholder="Describe the image for accessibility and SEO"
+                    className="w-full bg-[#0A0A0F] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white"
+                  />
+                </div>
                 <input
                   ref={fileInputRef}
                   type="file"

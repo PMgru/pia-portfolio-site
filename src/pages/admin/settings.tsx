@@ -51,6 +51,7 @@ export default function SiteSettings() {
 
   // ─── Image Tab ──────────────────────────────
   const [profileImageUrl, setProfileImageUrl] = useState('/images/pial-photo.jpg');
+  const [profileImageAlt, setProfileImageAlt] = useState('Pial Mahmud — Digital Marketing Expert');
   const [logoImageUrl, setLogoImageUrl] = useState('');
   const profileFileRef = useRef<HTMLInputElement>(null);
   const logoFileInputRef = useRef<HTMLInputElement>(null);
@@ -121,6 +122,7 @@ export default function SiteSettings() {
         if (settingsRes.ok) {
           const { settings, home } = await settingsRes.json();
           if (settings.profile_image) setProfileImageUrl(settings.profile_image);
+          if (settings.profile_image_alt_text) setProfileImageAlt(settings.profile_image_alt_text);
           if (settings.logo_image) setLogoImageUrl(settings.logo_image);
           if (settings.hero_title) setHeroTitle(settings.hero_title);
           if (settings.hero_subtitle) setHeroSubtitle(settings.hero_subtitle);
@@ -566,7 +568,7 @@ export default function SiteSettings() {
         await fetch('/api/settings', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ profile_image: url }),
+          body: JSON.stringify({ profile_image: url, profile_image_alt_text: profileImageAlt }),
         });
         setProfileImageUrl(url);
         toast.success('Profile photo updated — live on the site!', { id: 'profile-upload' });
@@ -578,24 +580,29 @@ export default function SiteSettings() {
     }
   };
 
+  const saveProfileImageAltText = async () => {
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profile_image_alt_text: profileImageAlt }),
+      });
+      if (res.ok) {
+        toast.success('Profile image alt text saved!', { style: { background: '#121218', color: '#fff' } });
+      } else {
+        toast.error('Failed to save profile alt text');
+      }
+    } catch {
+      toast.error('Failed to save profile alt text');
+    }
+  };
+
   const handleLogoImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     toast.loading('Uploading site logo...', { id: 'logo-img-upload' });
     const url = await uploadFile(file, 'sitelogo');
     if (url) {
-      try {
-        await fetch('/api/settings', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ logo_image: url }),
-        });
-        setLogoImageUrl(url);
-        toast.success('Site logo updated!', { id: 'logo-img-upload' });
-      } catch {
-        toast.error('Failed to save logo on server', { id: 'logo-img-upload' });
-      }
-    } else {
       toast.error('Upload failed', { id: 'logo-img-upload' });
     }
   };
@@ -1204,10 +1211,27 @@ export default function SiteSettings() {
                 </div>
                 <div className="flex flex-col gap-3">
                   <p className="text-xs text-[#9A8F95] leading-relaxed">Upload a high-quality photo (JPG/PNG, recommended 400×500px). This replaces the profile image across all pages.</p>
-                  <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#B76E79]/10 border border-[#B76E79]/30 text-xs font-bold text-[#B76E79] hover:bg-[#B76E79]/20 transition-all self-start">
-                    <Upload className="w-3.5 h-3.5" /> Upload Profile Photo
-                    <input ref={profileFileRef} type="file" accept="image/*" className="hidden" onChange={handleProfileUpload} />
-                  </label>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[10px] uppercase font-bold tracking-wider text-[#9A8F95]">Profile Image Alt Text</label>
+                    <input
+                      value={profileImageAlt}
+                      onChange={e => setProfileImageAlt(e.target.value)}
+                      placeholder="Describe this photo for search engines and accessibility"
+                      className="w-full bg-[#121218] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#B76E79]"
+                    />
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#B76E79]/10 border border-[#B76E79]/30 text-xs font-bold text-[#B76E79] hover:bg-[#B76E79]/20 transition-all self-start">
+                      <Upload className="w-3.5 h-3.5" /> Upload Profile Photo
+                      <input ref={profileFileRef} type="file" accept="image/*" className="hidden" onChange={handleProfileUpload} />
+                    </label>
+                    <button
+                      onClick={saveProfileImageAltText}
+                      className="py-2.5 px-4 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-white hover:bg-white/10 transition-all"
+                    >
+                      Save Alt Text
+                    </button>
+                  </div>
                   {profileImageUrl && (
                     <span className="text-[10px] text-emerald-400">✓ Image saved: {profileImageUrl}</span>
                   )}

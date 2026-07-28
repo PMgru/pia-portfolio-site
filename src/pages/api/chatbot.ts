@@ -13,8 +13,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // Visitor Ask Query
   if (req.method === 'POST' && action === 'ask') {
-    const { question, history } = req.body;
+    const { question, history, openrouter_api_key } = req.body;
     if (!question) return res.status(400).json({ message: 'Missing question' });
+
+    const requestKey = typeof openrouter_api_key === 'string' && openrouter_api_key.trim()
+      ? openrouter_api_key.trim()
+      : '';
+    const openRouterKey = requestKey || OPENROUTER_API_KEY;
 
     const knowledge = JsonDb.getCollection('chatbot_knowledge');
 
@@ -43,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // 2. Try LLM fallback if OpenRouter key is set
-    if (OPENROUTER_API_KEY && OPENROUTER_API_KEY !== 'undefined') {
+    if (openRouterKey && openRouterKey !== 'undefined') {
       try {
         const kbContext = knowledge.map(k => `Q: ${k.question}\nA: ${k.answer}`).join('\n\n');
         const systemPrompt = `You are a premium AI Concierge Chatbot on the portfolio website of Pial Mahmud, a Digital Marketing & SEO Growth Expert.
@@ -72,7 +77,7 @@ Assistant:`;
           },
           {
             headers: {
-              'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+              'Authorization': `Bearer ${openRouterKey}`,
               'Content-Type': 'application/json',
             },
             timeout: 5000,
