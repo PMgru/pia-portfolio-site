@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -7,7 +7,7 @@ import { Mail, Phone, MapPin, Send, Clock, MessageSquare, Linkedin, Twitter, Ins
 
 // services and budgets loaded dynamically from admin settings
 
-export default function ContactPage() {
+export default function ContactPage({ ssrMeta }: { ssrMeta?: any }) {
   const [form, setForm] = useState({ name: '', email: '', company: '', service: '', budget: '', message: '', website: '' });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -24,9 +24,9 @@ export default function ContactPage() {
   ]);
   const [budgetOptions, setBudgetOptions] = useState<string[]>([
     'Under $500',
-    '$500 – $1,000',
-    '$1,000 – $2,500',
-    '$2,500 – $5,000',
+    '$500 â€“ $1,000',
+    '$1,000 â€“ $2,500',
+    '$2,500 â€“ $5,000',
     '$5,000+',
   ]);
 
@@ -35,7 +35,7 @@ export default function ContactPage() {
     phone: '+880 1XXX-XXXXXX',
     whatsappUrl: 'https://wa.me/8801XXXXXXXXX',
     location: 'Dhaka, Bangladesh',
-    availability: 'Mon–Fri, 9am–6pm (BST)',
+    availability: 'Monâ€“Fri, 9amâ€“6pm (BST)',
     linkedin: 'https://linkedin.com/in/pialmahmud',
   });
 
@@ -47,7 +47,7 @@ export default function ContactPage() {
         phone: s.phone || '+880 1XXX-XXXXXX',
         whatsappUrl: s.whatsapp_url || 'https://wa.me/8801XXXXXXXXX',
         location: s.location || 'Dhaka, Bangladesh',
-        availability: s.availability || 'Mon–Fri, 9am–6pm (BST)',
+        availability: s.availability || 'Monâ€“Fri, 9amâ€“6pm (BST)',
         linkedin: s.linkedin_url || 'https://linkedin.com/in/pialmahmud',
       });
       // Load dynamic services from admin
@@ -104,9 +104,10 @@ export default function ContactPage() {
     <>
       <SEO
         slug="contact"
-        fallbackTitle="Contact Pial Mahmud — Start Your Growth Journey Today"
+        fallbackTitle="Contact Pial Mahmud â€” Start Your Growth Journey Today"
         fallbackDescription="Get in touch with Pial Mahmud for digital marketing, SEO, and AI-powered growth strategies. Free consultation, 24-hour response time."
         fallbackKeywords="Hire SEO Expert, Digital Marketing Consultation, Technical SEO Audit Request, Contact Pial Mahmud"
+              ssrMeta={ssrMeta}
       />
 
       <div style={{ background: '#080B14', minHeight: '100vh' }}>
@@ -115,7 +116,7 @@ export default function ContactPage() {
 
         <main style={{ position: 'relative', zIndex: 1, paddingTop: 100 }}>
 
-          {/* ── PAGE HERO ─────────────────── */}
+          {/* â”€â”€ PAGE HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section style={{ padding: '80px 0 60px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
             <div className="container-main">
               <div className="section-label" style={{ justifyContent: 'center' }}>Let's Connect</div>
@@ -130,18 +131,18 @@ export default function ContactPage() {
             </div>
           </section>
 
-          {/* ── CONTACT MAIN ──────────────── */}
+          {/* â”€â”€ CONTACT MAIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section className="section">
             <div className="container-main">
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 60, alignItems: 'start' }}>
 
-                {/* Left — Info */}
+                {/* Left â€” Info */}
                 <div>
                   <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 28, fontWeight: 700, color: '#F0F2F8', marginBottom: 16 }}>
                     Get In Touch
                   </h2>
                   <p style={{ fontSize: 14, color: '#6B7A99', lineHeight: 1.8, marginBottom: 36 }}>
-                    Whether you're looking to scale your SEO, launch a campaign, or discuss an AI marketing strategy — 
+                    Whether you're looking to scale your SEO, launch a campaign, or discuss an AI marketing strategy â€” 
                     I'm here to help. Let's talk.
                   </p>
 
@@ -207,11 +208,11 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                {/* Right — Form */}
+                {/* Right â€” Form */}
                 <div className="card" style={{ padding: 40 }}>
                   {submitted ? (
                     <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                      <div style={{ fontSize: 60, marginBottom: 20 }}>🎉</div>
+                      <div style={{ fontSize: 60, marginBottom: 20 }}>ðŸŽ‰</div>
                       <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: 28, fontWeight: 700, color: '#F0F2F8', marginBottom: 12 }}>
                         Message Received!
                       </h3>
@@ -302,7 +303,7 @@ export default function ContactPage() {
                         />
                       </div>
 
-                      {/* Honeypot field — hidden from real users, catches bots. */}
+                      {/* Honeypot field â€” hidden from real users, catches bots. */}
                       <input
                         type="text"
                         name="website"
@@ -368,4 +369,16 @@ export default function ContactPage() {
       `}</style>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const res = await fetch(baseUrl + '/api/pages?slug=contact');
+    if (res.ok) {
+      const page = await res.json();
+      return { props: { ssrMeta: { meta_title: page.meta_title || null, meta_description: page.meta_description || null, focus_keyword: page.focus_keyword || null } } };
+    }
+  } catch {}
+  return { props: { ssrMeta: null } };
 }

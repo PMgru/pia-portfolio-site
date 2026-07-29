@@ -208,8 +208,19 @@ export default function SiteSettings() {
             }),
           });
           const data = await res.json();
+          if (!res.ok) {
+            if (res.status === 401) {
+              toast.error('Session expired — please log in again', { duration: 4000 });
+              setTimeout(() => router.push('/admin'), 2000);
+            } else {
+              toast.error(data.message || 'Upload failed');
+            }
+            resolve(null);
+            return;
+          }
           resolve(data.url || null);
         } catch {
+          toast.error('Network error during upload');
           resolve(null);
         } finally {
           setUploadProgress(p => ({ ...p, [key]: false }));
@@ -603,7 +614,19 @@ export default function SiteSettings() {
     toast.loading('Uploading site logo...', { id: 'logo-img-upload' });
     const url = await uploadFile(file, 'sitelogo');
     if (url) {
-      toast.error('Upload failed', { id: 'logo-img-upload' });
+      try {
+        await fetch('/api/settings', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ logo_image: url }),
+        });
+        setLogoImageUrl(url);
+        toast.success('Brand logo updated — live on site!', { id: 'logo-img-upload' });
+      } catch {
+        toast.error('Failed to save logo on server', { id: 'logo-img-upload' });
+      }
+    } else {
+      toast.error('Upload failed. Please check login session or image format.', { id: 'logo-img-upload' });
     }
   };
 

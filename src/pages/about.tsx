@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
@@ -8,24 +8,24 @@ import toast, { Toaster } from 'react-hot-toast';
 import { ArrowRight, Download, CheckCircle, Award, BookOpen, Briefcase } from 'lucide-react';
 
 const values = [
-  { icon: '🎯', title: 'Results-First', desc: 'Every strategy is built around measurable outcomes and real ROI, not vanity metrics.' },
-  { icon: '🤖', title: 'AI-Augmented', desc: 'I leverage cutting-edge AI tools to find opportunities others miss and execute faster.' },
-  { icon: '📊', title: 'Data-Driven', desc: 'Every decision is backed by data — no guesswork, no shortcuts, no wasted budget.' },
-  { icon: '🤝', title: 'Client-Centric', desc: 'I treat your business like my own. Your growth is my personal mission.' },
+  { icon: 'ðŸŽ¯', title: 'Results-First', desc: 'Every strategy is built around measurable outcomes and real ROI, not vanity metrics.' },
+  { icon: 'ðŸ¤–', title: 'AI-Augmented', desc: 'I leverage cutting-edge AI tools to find opportunities others miss and execute faster.' },
+  { icon: 'ðŸ“Š', title: 'Data-Driven', desc: 'Every decision is backed by data â€” no guesswork, no shortcuts, no wasted budget.' },
+  { icon: 'ðŸ¤', title: 'Client-Centric', desc: 'I treat your business like my own. Your growth is my personal mission.' },
 ];
 
-export default function AboutPage() {
-  // Start with empty string — no image is shown until API responds
+export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
+  // Start with empty string â€” no image is shown until API responds
   // This prevents the wrong/local fallback path from firing onError before we know the real URL
   const [profileImage, setProfileImage] = useState('');
-  const [profileImageAlt, setProfileImageAlt] = useState('Pial Mahmud — Digital Marketing Expert');
+  const [profileImageAlt, setProfileImageAlt] = useState('Pial Mahmud â€” Digital Marketing Expert');
   const [imageError, setImageError] = useState(false);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [skills, setSkills] = useState<{name: string, level: number}[]>([]);
   const [experiences, setExperiences] = useState<{role: string, company: string, period: string, desc: string}[]>([]);
   const [aboutTitle, setAboutTitle] = useState('Turning Digital Presence into | Measurable Growth');
   const [aboutIntro, setAboutIntro] = useState("I'm Pial Mahmud, an AI-powered Digital Marketing & SEO Expert based in Bangladesh, working with brands globally. With 5+ years of hands-on experience, I've helped businesses across EdTech, Real Estate, Media, and Technology achieve transformational results.");
-  const [aboutDesc, setAboutDesc] = useState("I combine deep technical SEO expertise with AI tools, creative content strategy, and data-driven campaign management to deliver growth that lasts — not just quick wins.");
+  const [aboutDesc, setAboutDesc] = useState("I combine deep technical SEO expertise with AI tools, creative content strategy, and data-driven campaign management to deliver growth that lasts â€” not just quick wins.");
   const [yearsExp, setYearsExp] = useState('');
 
   // Reset imageError whenever the URL changes so a fresh load attempt is made
@@ -36,7 +36,7 @@ export default function AboutPage() {
   const handleCvDownload = (e: React.MouseEvent) => {
     e.preventDefault();
     toast('CV is being prepared. Contact Pial directly at hello@pialmahmud.com to request it.', {
-      icon: '📄',
+      icon: 'ðŸ“„',
       style: { background: '#0E1420', color: '#F0F2F8', border: '1px solid rgba(201,168,76,0.25)', fontSize: 13 },
       duration: 5000,
     });
@@ -55,7 +55,7 @@ export default function AboutPage() {
           const data = await settingsRes.json();
           // /api/settings?home=1 returns { settings: {...}, home: {...} }
           const s = data.settings || data;
-          // Always set profileImage from API — even if empty string,
+          // Always set profileImage from API â€” even if empty string,
           // so we don't render a broken local path
           setProfileImage(s.profile_image || '');
           if (s.profile_image_alt_text) setProfileImageAlt(s.profile_image_alt_text);
@@ -74,7 +74,7 @@ export default function AboutPage() {
             setExperiences(expData.sort((a,b) => (a.display_order || 0) - (b.display_order || 0)).map(e => ({
               role: e.job_title,
               company: e.company_name,
-              period: `${e.start_date ? new Date(e.start_date).getFullYear() : ''} — ${e.is_current ? 'Present' : (e.end_date ? new Date(e.end_date).getFullYear() : '')}`,
+              period: `${e.start_date ? new Date(e.start_date).getFullYear() : ''} â€” ${e.is_current ? 'Present' : (e.end_date ? new Date(e.end_date).getFullYear() : '')}`,
               desc: e.description
             })));
           }
@@ -99,6 +99,7 @@ export default function AboutPage() {
         fallbackTitle="About Pial Mahmud — AI-Powered Digital Marketing Expert"
         fallbackDescription="Learn about Pial Mahmud — a top-tier digital marketing and SEO expert with 5+ years of experience driving exceptional growth for global brands."
         fallbackKeywords="About Pial Mahmud, Digital Marketing Expert, Technical SEO Specialist, Bangladesh SEO Consultant"
+        ssrMeta={ssrMeta}
       />
 
       <div style={{ background: '#080B14', minHeight: '100vh' }}>
@@ -108,7 +109,7 @@ export default function AboutPage() {
 
         <main style={{ position: 'relative', zIndex: 1, paddingTop: 100 }}>
 
-          {/* ── HERO ─────────────────────────── */}
+          {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section style={{ padding: '80px 0 60px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
             <div className="container-main">
               <div className="grid-2col" style={{ gap: 80, alignItems: 'center' }}>
@@ -204,7 +205,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* ── VALUES ─────────────────────────── */}
+          {/* â”€â”€ VALUES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section className="section">
             <div className="container-main">
               <div style={{ textAlign: 'center', marginBottom: 60 }}>
@@ -225,7 +226,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* ── SKILLS ─────────────────────────── */}
+          {/* â”€â”€ SKILLS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section className="section" style={{ background: 'rgba(14,20,32,0.3)' }}>
             <div className="container-main">
               <div className="grid-2col about-skills-grid" style={{ gap: 'clamp(32px, 6vw, 80px)', alignItems: 'start' }}>
@@ -271,7 +272,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* ── EXPERIENCE ─────────────────────────── */}
+          {/* â”€â”€ EXPERIENCE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section className="section">
             <div className="container-main">
               <div style={{ textAlign: 'center', marginBottom: 60 }}>
@@ -313,7 +314,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* ── CTA ─────────────────────────── */}
+          {/* â”€â”€ CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section style={{ padding: '80px 0', textAlign: 'center', background: 'rgba(14,20,32,0.3)' }}>
             <div className="container-main">
               <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, color: '#F0F2F8', marginBottom: 20 }}>
@@ -334,4 +335,26 @@ export default function AboutPage() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const res = await fetch(baseUrl + '/api/pages?slug=about');
+    if (res.ok) {
+      const page = await res.json();
+      return {
+        props: {
+          ssrMeta: {
+            meta_title: page.meta_title || null,
+            meta_description: page.meta_description || null,
+            focus_keyword: page.focus_keyword || null,
+          },
+        },
+      };
+    }
+  } catch {
+    // Fall back to client-side fetch
+  }
+  return { props: { ssrMeta: null } };
 }

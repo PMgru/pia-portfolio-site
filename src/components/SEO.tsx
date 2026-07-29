@@ -10,6 +10,13 @@ interface SeoProps {
   ogType?: string;
   schema?: any;
   canonicalPath?: string;
+  // Optional SSR-pre-fetched data to skip the client fetch when available
+  ssrMeta?: {
+    meta_title?: string;
+    meta_description?: string;
+    focus_keyword?: string;
+    og_image?: string;
+  };
 }
 
 export default function SEO({
@@ -21,18 +28,20 @@ export default function SEO({
   ogType = 'website',
   schema,
   canonicalPath,
+  ssrMeta,
 }: SeoProps) {
-  const [metaTitle, setMetaTitle] = useState(fallbackTitle);
-  const [metaDescription, setMetaDescription] = useState(fallbackDescription);
-  const [focusKeyword, setFocusKeyword] = useState(fallbackKeywords);
-  const [currentOgImage, setCurrentOgImage] = useState(ogImage);
+  const [metaTitle, setMetaTitle] = useState(ssrMeta?.meta_title || fallbackTitle);
+  const [metaDescription, setMetaDescription] = useState(ssrMeta?.meta_description || fallbackDescription);
+  const [focusKeyword, setFocusKeyword] = useState(ssrMeta?.focus_keyword || fallbackKeywords);
+  const [currentOgImage, setCurrentOgImage] = useState(ssrMeta?.og_image || ogImage);
   const [siteName, setSiteName] = useState('Pial Mahmud');
+  const [imageAltText, setImageAltText] = useState('Pial Mahmud — Digital Marketing & SEO Expert');
 
   useEffect(() => {
     let active = true;
 
-    // Fetch page specific SEO tags from API (saved via Admin SEO Center / Settings)
-    if (slug) {
+    // If ssrMeta was provided (from getServerSideProps), skip client-side fetch for page data
+    if (slug && !ssrMeta) {
       fetch(`/api/pages?slug=${slug}`)
         .then((res) => (res.ok ? res.json() : null))
         .then((pageData) => {
@@ -45,13 +54,20 @@ export default function SEO({
         .catch(() => {});
     }
 
+    // Always fetch global settings (site name, profile image alt, og_image override)
     fetch('/api/settings')
       .then((res) => (res.ok ? res.json() : null))
       .then((settings) => {
         if (!active || !settings) return;
         if (settings.site_name) setSiteName(settings.site_name);
-        if (settings.profile_image && slug === 'home') {
+        if (settings.profile_image_alt_text) setImageAltText(settings.profile_image_alt_text);
+        // Use profile image as og:image for homepage if no specific og_image is set
+        if (settings.profile_image && slug === 'home' && !ssrMeta?.og_image) {
           setCurrentOgImage(settings.profile_image);
+        }
+        // Allow admin to override og_image globally via settings
+        if (settings.og_image_override) {
+          setCurrentOgImage(settings.og_image_override);
         }
       })
       .catch(() => {});
@@ -59,7 +75,7 @@ export default function SEO({
     return () => {
       active = false;
     };
-  }, [slug]);
+  }, [slug, ssrMeta]);
 
   const fullCanonicalUrl = `https://pialmahmud.com${canonicalPath || (slug === 'home' ? '' : `/${slug}`)}`;
   const finalOgImage = currentOgImage.startsWith('http') ? currentOgImage : `https://pialmahmud.com${currentOgImage}`;
@@ -84,6 +100,7 @@ export default function SEO({
       <meta property="og:title" content={metaTitle} />
       <meta property="og:description" content={metaDescription} />
       <meta property="og:image" content={finalOgImage} />
+      <meta property="og:image:alt" content={imageAltText} />
       <meta property="og:site_name" content={siteName} />
       <meta property="og:locale" content="en_US" />
 
@@ -93,6 +110,7 @@ export default function SEO({
       <meta name="twitter:title" content={metaTitle} />
       <meta name="twitter:description" content={metaDescription} />
       <meta name="twitter:image" content={finalOgImage} />
+      <meta name="twitter:image:alt" content={imageAltText} />
       <meta name="twitter:creator" content="@pialmahmud" />
 
       {/* Schema Injection */}

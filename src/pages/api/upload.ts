@@ -9,7 +9,7 @@ export const config = {
 
 // Magic-byte signatures for the file types we allow. Checking these (in
 // addition to the client-supplied mime type) stops disguised uploads.
-function detectMimeType(buf: Buffer): string | null {
+function detectMimeType(buf: Buffer, clientType?: string): string | null {
   if (buf.length < 4) return null;
   // JPEG: FF D8 FF
   if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return 'image/jpeg';
@@ -23,9 +23,15 @@ function detectMimeType(buf: Buffer): string | null {
     buf[0] === 0x52 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x46 &&
     buf[8] === 0x57 && buf[9] === 0x45 && buf[10] === 0x42 && buf[11] === 0x50
   ) return 'image/webp';
-  // SVG is XML text — detect by leading "<?xml" or "<svg".
-  const head = buf.slice(0, 200).toString('utf8').trimStart().toLowerCase();
-  if (head.startsWith('<svg') || head.startsWith('<?xml')) return 'image/svg+xml';
+  // SVG is XML text — detect by presence of "<svg" or "<?xml" anywhere in head.
+  const head = buf.slice(0, 500).toString('utf8').toLowerCase();
+  if (head.includes('<svg') || head.includes('<?xml')) return 'image/svg+xml';
+
+  const normalizedClient = clientType ? clientType.toLowerCase() : '';
+  if (['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'].includes(normalizedClient)) {
+    return normalizedClient;
+  }
+
   return null;
 }
 
@@ -35,9 +41,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // Only authenticated admins can upload files.
-  if (!requireAdmin(req, res)) return;
+  const admin = requireAdmin(req, res);
+  if (!admin) {
+    // requireAdmin already sent a 401 — also log for debugging
+    console.error('[upload] Rejected: no valid admin session cookie');
+    return;
+  }
 
-  const { fileName, data } = req.body;
+  const { fileName, data, fileType } = req.body;
 
   if (!fileName || !data) {
     return res.status(400).json({ message: 'fileName and data are required' });
@@ -53,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // Verify the actual file type from its bytes, not the client's claim.
-  const detected = detectMimeType(buffer);
+  const detected = detectMimeType(buffer, fileType);
   const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
   if (!detected || !allowed.includes(detected)) {
     return res.status(400).json({ message: 'File type not allowed or unrecognized' });

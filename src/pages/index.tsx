@@ -61,7 +61,16 @@ const defaultTestimonials = [
   },
 ];
 
-export default function HomePage() {
+interface HomePageProps {
+  ssrMeta?: {
+    meta_title?: string;
+    meta_description?: string;
+    focus_keyword?: string;
+    og_image?: string;
+  };
+}
+
+export default function HomePage({ ssrMeta }: HomePageProps) {
   const [testimonials, setTestimonials] = useState(defaultTestimonials);
   const [typedText, setTypedText] = useState('');
   const [typingTexts, setTypingTexts] = useState(['SEO Expert', 'Growth Hacker', 'AI Strategist', 'Digital Marketer']);
@@ -72,6 +81,7 @@ export default function HomePage() {
   // Dynamic content loaded from the admin-managed settings + home_content.
   // Use empty string as initial — prevents broken local-path onError before API responds
   const [profileImage, setProfileImage] = useState('');
+  const [profileImageAlt, setProfileImageAlt] = useState('Pial Mahmud — Digital Marketing & SEO Expert');
   const [imageError, setImageError] = useState(false);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [clients, setClients] = useState<any[]>([]);
@@ -127,6 +137,9 @@ export default function HomePage() {
         if (settings?.profile_image) {
           setProfileImage(settings.profile_image);
           setImageError(false);
+        }
+        if (settings?.profile_image_alt_text) {
+          setProfileImageAlt(settings.profile_image_alt_text);
         }
         setSettingsLoaded(true);
         if (settings?.hero_title) setHeroDesc(settings.hero_title);
@@ -421,6 +434,7 @@ export default function HomePage() {
         fallbackDescription="Pial Mahmud is a top-tier Digital Marketing & SEO Expert helping brands grow with AI-powered strategies, organic traffic, and high-converting campaigns."
         fallbackKeywords="Pial Mahmud, Digital Marketing Expert, SEO Expert, GEO, AEO, Technical SEO, Next.js Development, Meta Ads"
         schema={schemaData}
+        ssrMeta={ssrMeta}
       />
 
       {/* Background */}
@@ -541,7 +555,7 @@ export default function HomePage() {
                       <img
                         key={profileImage}
                         src={profileImage}
-                        alt="Pial Mahmud — Digital Marketing Expert"
+                        alt={profileImageAlt}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
                         onError={() => setImageError(true)}
                       />
@@ -1112,4 +1126,29 @@ export default function HomePage() {
       `}</style>
     </>
   );
+}
+
+// Server-side render SEO metadata from admin panel on every request
+// This ensures search engines and social crawlers always see the latest meta tags
+export async function getServerSideProps() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/api/pages?slug=home`);
+    if (res.ok) {
+      const page = await res.json();
+      return {
+        props: {
+          ssrMeta: {
+            meta_title: page.meta_title || null,
+            meta_description: page.meta_description || null,
+            focus_keyword: page.focus_keyword || null,
+            og_image: page.og_image || null,
+          },
+        },
+      };
+    }
+  } catch {
+    // Fall back to client-side fetch if server request fails
+  }
+  return { props: { ssrMeta: null } };
 }

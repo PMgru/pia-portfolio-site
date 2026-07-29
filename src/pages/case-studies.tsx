@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
@@ -10,7 +10,7 @@ const DEFAULT_CASE_STUDIES = [
   {
     slug: 'tutorsplan-seo-growth',
     client: 'TutorsPlan',
-    tag: 'EdTech · SEO & Content',
+    tag: 'EdTech Â· SEO & Content',
     logo: '/images/clients/tutorsplan.svg',
     title: '412% Organic Traffic Growth in 8 Months',
     excerpt: 'A UK-based tutoring platform was struggling to rank. Through a complete technical SEO overhaul, strategic content architecture, and targeted link building, I achieved top 3 rankings for 200+ keywords.',
@@ -26,14 +26,14 @@ const DEFAULT_CASE_STUDIES = [
   {
     slug: 'bashundhara-digital-campaign',
     client: 'Bashundhara Housing',
-    tag: 'Real Estate · Full Digital Campaign',
+    tag: 'Real Estate Â· Full Digital Campaign',
     logo: '/images/clients/bashundhara.svg',
     title: 'Generated 1,400+ Qualified Leads in Q1 2024',
     excerpt: 'Bangladesh\'s leading housing brand needed high-quality leads for premium properties. I designed a full-funnel digital strategy combining Google Ads, Meta, and SEO targeting high-net-worth individuals.',
     metrics: [
       { label: 'Qualified Leads', value: '1,400+' },
       { label: 'Cost Per Lead', value: '-68%' },
-      { label: 'Revenue Attributed', value: '৳2.1M' },
+      { label: 'Revenue Attributed', value: 'à§³2.1M' },
       { label: 'ROAS', value: '11.4x' },
     ],
     accent: '#E8C96A',
@@ -42,7 +42,7 @@ const DEFAULT_CASE_STUDIES = [
   {
     slug: 'tvhut-content-strategy',
     client: 'TVHUT',
-    tag: 'Media · Content & SEO',
+    tag: 'Media Â· Content & SEO',
     logo: '/images/clients/tvhut.svg',
     title: '2.8M Monthly Impressions via Content Marketing',
     excerpt: 'Built a complete content marketing engine for a growing media platform. Focused on entertainment SEO, trending topic capture, and structured content clusters to dominate Bangladesh\'s digital media space.',
@@ -58,7 +58,7 @@ const DEFAULT_CASE_STUDIES = [
   {
     slug: 'kdgtal-brand-strategy',
     client: 'KDGTAL',
-    tag: 'Digital Agency · Brand Strategy',
+    tag: 'Digital Agency Â· Brand Strategy',
     logo: '/images/clients/kdgtal.svg',
     title: 'Rebranding & Digital Positioning for a Growing Agency',
     excerpt: 'KDGTAL needed a stronger digital presence to compete in a crowded agency market. I revamped their SEO strategy, content positioning, and LinkedIn outreach to attract enterprise clients.',
@@ -66,7 +66,7 @@ const DEFAULT_CASE_STUDIES = [
       { label: 'Website Traffic', value: '+290%' },
       { label: 'LinkedIn Leads', value: '+85/mo' },
       { label: 'Enterprise Inquiries', value: '+3x' },
-      { label: 'DA Score', value: 'DA 38→52' },
+      { label: 'DA Score', value: 'DA 38â†’52' },
     ],
     accent: '#F59E0B',
     result: 'Secured 3 enterprise contracts within 6 months',
@@ -74,13 +74,13 @@ const DEFAULT_CASE_STUDIES = [
   {
     slug: 'hena-tech-seo',
     client: 'Hena Technology',
-    tag: 'Technology · SEO Strategy',
+    tag: 'Technology Â· SEO Strategy',
     logo: '/images/clients/hena.svg',
     title: 'Reduced Customer Acquisition Cost by 45% with Organic SEO',
-    excerpt: 'A tech company was over-reliant on paid ads. I shifted their strategy toward organic growth — optimizing their product pages, building authority content, and targeting long-tail commercial keywords.',
+    excerpt: 'A tech company was over-reliant on paid ads. I shifted their strategy toward organic growth â€” optimizing their product pages, building authority content, and targeting long-tail commercial keywords.',
     metrics: [
       { label: 'CAC Reduction', value: '-45%' },
-      { label: 'Organic Share', value: '18%→67%' },
+      { label: 'Organic Share', value: '18%â†’67%' },
       { label: 'Blog Traffic', value: '+320%' },
       { label: 'Demo Requests', value: '+2.4x' },
     ],
@@ -90,14 +90,14 @@ const DEFAULT_CASE_STUDIES = [
   {
     slug: 'misterberry-social-growth',
     client: 'Mister Berry',
-    tag: 'F&B Brand · Social & Local SEO',
+    tag: 'F&B Brand Â· Social & Local SEO',
     logo: '/images/clients/misterberry.svg',
     title: 'Built a 50K+ Local Following from Zero for an F&B Brand',
     excerpt: 'Helped a Dhaka-based bakery brand build a loyal digital community. Combined Instagram content strategy, local SEO optimization, and Google Business Profile management to drive foot traffic.',
     metrics: [
       { label: 'Social Followers', value: '50K+' },
       { label: 'Foot Traffic', value: '+140%' },
-      { label: 'Google Reviews', value: '4.9★ (800+)' },
+      { label: 'Google Reviews', value: '4.9â˜… (800+)' },
       { label: 'Monthly Reach', value: '1.2M' },
     ],
     accent: '#F97316',
@@ -105,7 +105,7 @@ const DEFAULT_CASE_STUDIES = [
   },
 ];
 
-export default function CaseStudiesPage() {
+export default function CaseStudiesPage({ ssrMeta }: { ssrMeta?: any }) {
   // Start with the hard-coded defaults so the page renders instantly; then
   // hydrate from the DB so admin-created case studies appear too.
   const [caseStudies, setCaseStudies] = useState(DEFAULT_CASE_STUDIES);
@@ -144,9 +144,10 @@ export default function CaseStudiesPage() {
     <>
       <SEO
         slug="case-studies"
-        fallbackTitle="Case Studies — Proven SEO & Digital Marketing Results | Pial Mahmud"
+        fallbackTitle="Case Studies â€” Proven SEO & Digital Marketing Results | Pial Mahmud"
         fallbackDescription="Real campaigns. Real results. Explore case studies showing 400%+ traffic growth, high ROAS, and measurable ROI across EdTech, Real Estate, and Tech industries."
         fallbackKeywords="SEO Case Studies, Digital Marketing Results, Organic Traffic Growth, SEO ROI"
+              ssrMeta={ssrMeta}
       />
 
       <div style={{ background: '#080B14', minHeight: '100vh' }}>
@@ -155,7 +156,7 @@ export default function CaseStudiesPage() {
 
         <main style={{ position: 'relative', zIndex: 1, paddingTop: 100 }}>
 
-          {/* ── HERO ─────────────────────────────────── */}
+          {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section style={{ padding: '80px 0 60px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
             <div className="container-main">
               <div className="section-label" style={{ justifyContent: 'center' }}>Proven Results</div>
@@ -170,7 +171,7 @@ export default function CaseStudiesPage() {
             </div>
           </section>
 
-          {/* ── STATS BAR ──────────────────────────── */}
+          {/* â”€â”€ STATS BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section style={{ padding: '40px 0', background: 'rgba(14,20,32,0.4)', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
             <div className="container-main">
               <div className="grid-4col" style={{ gap: 24, textAlign: 'center' }}>
@@ -189,14 +190,14 @@ export default function CaseStudiesPage() {
             </div>
           </section>
 
-          {/* ── CASE STUDIES GRID ─────────────────── */}
+          {/* â”€â”€ CASE STUDIES GRID â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section className="section">
             <div className="container-main">
               <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
                 {caseStudies.map((cs, i) => (
                   <div className="case-study-card grid-2col" style={{ minHeight: 0 }}>
                     
-                    {/* Left — Content */}
+                    {/* Left â€” Content */}
                     <div style={{ padding: 40 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
                         <div style={{
@@ -254,7 +255,7 @@ export default function CaseStudiesPage() {
                       </Link>
                     </div>
 
-                    {/* Right — Metrics */}
+                    {/* Right â€” Metrics */}
                     <div style={{
                       background: 'rgba(8,11,20,0.6)', padding: 40,
                       display: 'flex', flexDirection: 'column', justifyContent: 'center',
@@ -282,7 +283,7 @@ export default function CaseStudiesPage() {
             </div>
           </section>
 
-          {/* ── CTA ─────────────────────────────────── */}
+          {/* â”€â”€ CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section style={{ padding: '80px 0', textAlign: 'center', background: 'linear-gradient(135deg, rgba(201,168,76,0.06), rgba(0,212,255,0.03))' }}>
             <div className="container-main">
               <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, color: '#F0F2F8', marginBottom: 20 }}>
@@ -303,4 +304,16 @@ export default function CaseStudiesPage() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const res = await fetch(baseUrl + '/api/pages?slug=case-studies');
+    if (res.ok) {
+      const page = await res.json();
+      return { props: { ssrMeta: { meta_title: page.meta_title || null, meta_description: page.meta_description || null, focus_keyword: page.focus_keyword || null } } };
+    }
+  } catch {}
+  return { props: { ssrMeta: null } };
 }

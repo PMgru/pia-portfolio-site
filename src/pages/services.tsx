@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
@@ -9,17 +9,17 @@ import { ArrowRight, CheckCircle, ChevronRight, Zap } from 'lucide-react';
 // services loaded from API
 
 const additionalServices = [
-  { icon: '📊', title: 'Analytics & Reporting', desc: 'Deep-dive analytics setup with custom dashboards and monthly performance reports.' },
-  { icon: '✍️', title: 'Content Strategy & Creation', desc: 'Blog posts, landing pages, and social content that rank and convert.' },
-  { icon: '🔗', title: 'Link Building Campaigns', desc: 'White-hat outreach to build high-DA backlinks that boost your authority.' },
-  { icon: '🛒', title: 'E-commerce SEO', desc: 'Product page optimization, category SEO, and shopping campaigns for online stores.' },
-  { icon: '📱', title: 'Social Media Management', desc: 'Content calendars, posting schedules, and engagement strategies for all platforms.' },
-  { icon: '💌', title: 'Email Marketing', desc: 'List building, automation sequences, and campaign design that drives revenue.' },
+  { icon: 'ðŸ“Š', title: 'Analytics & Reporting', desc: 'Deep-dive analytics setup with custom dashboards and monthly performance reports.' },
+  { icon: 'âœï¸', title: 'Content Strategy & Creation', desc: 'Blog posts, landing pages, and social content that rank and convert.' },
+  { icon: 'ðŸ”—', title: 'Link Building Campaigns', desc: 'White-hat outreach to build high-DA backlinks that boost your authority.' },
+  { icon: 'ðŸ›’', title: 'E-commerce SEO', desc: 'Product page optimization, category SEO, and shopping campaigns for online stores.' },
+  { icon: 'ðŸ“±', title: 'Social Media Management', desc: 'Content calendars, posting schedules, and engagement strategies for all platforms.' },
+  { icon: 'ðŸ’Œ', title: 'Email Marketing', desc: 'List building, automation sequences, and campaign design that drives revenue.' },
 ];
 
 const defaultServices = [
   {
-    icon: '🚀',
+    icon: 'ðŸš€',
     title: 'AI-Powered SEO Strategy',
     subtitle: 'Dominate Search Rankings',
     desc: 'Advanced technical SEO, entity-based optimization, and programmatic content scaling engineered to beat search algorithms.',
@@ -28,7 +28,7 @@ const defaultServices = [
     popular: true
   },
   {
-    icon: '🎯',
+    icon: 'ðŸŽ¯',
     title: 'Growth Marketing & Paid Ads',
     subtitle: 'High-ROAS Ad Campaigns',
     desc: 'Data-backed Google Ads, Meta Ads, and multi-channel performance marketing optimized for maximum conversion rate and lowest CAC.',
@@ -37,7 +37,7 @@ const defaultServices = [
     popular: false
   },
   {
-    icon: '🤖',
+    icon: 'ðŸ¤–',
     title: 'AI Marketing & Automation',
     subtitle: 'Leverage Next-Gen AI',
     desc: 'Custom AI workflows, automated lead nurturing, chatbot integrations, and predictive analytics to scale your operations effortlessly.',
@@ -50,19 +50,19 @@ const defaultServices = [
 const processSteps = [
   { step: '01', title: 'Discovery Call', desc: 'We start with a free 30-minute call to understand your goals, challenges, and budget.' },
   { step: '02', title: 'Audit & Research', desc: 'Deep analysis of your current digital presence, competitors, and market opportunities.' },
-  { step: '03', title: 'Strategy Proposal', desc: 'A custom roadmap with clear goals, timelines, and expected outcomes — no fluff.' },
+  { step: '03', title: 'Strategy Proposal', desc: 'A custom roadmap with clear goals, timelines, and expected outcomes â€” no fluff.' },
   { step: '04', title: 'Execution', desc: 'I execute the strategy with full transparency, weekly updates, and real-time reporting.' },
-  { step: '05', title: 'Optimize & Scale', desc: 'Continuous optimization based on data — refining what works and doubling down on wins.' },
+  { step: '05', title: 'Optimize & Scale', desc: 'Continuous optimization based on data â€” refining what works and doubling down on wins.' },
 ];
 
-export default function ServicesPage() {
+export default function ServicesPage({ ssrMeta }: { ssrMeta?: any }) {
   const [services, setServices] = useState<any[]>(defaultServices);
 
   useEffect(() => {
     fetch('/api/services').then(res => res.json()).then(data => {
       if (Array.isArray(data) && data.length > 0) {
         setServices(data.sort((a,b) => (a.display_order || 0) - (b.display_order || 0)).map((s, i) => ({
-          icon: s.icon || '🎯',
+          icon: s.icon || 'ðŸŽ¯',
           title: s.title,
           subtitle: '',
           desc: s.description,
@@ -78,9 +78,10 @@ export default function ServicesPage() {
     <>
       <SEO
         slug="services"
-        fallbackTitle="Digital Marketing & SEO Services — Pial Mahmud"
+        fallbackTitle="Digital Marketing & SEO Services â€” Pial Mahmud"
         fallbackDescription="Explore Pial Mahmud's premium digital marketing services including Technical SEO, GEO & AEO AI search optimization, PPC, and Next.js Web Development."
         fallbackKeywords="SEO Services, Generative Engine Optimization, Technical SEO Audit, Meta Ads, Next.js Web Development"
+              ssrMeta={ssrMeta}
       />
 
       <div style={{ background: '#080B14', minHeight: '100vh' }}>
@@ -89,7 +90,7 @@ export default function ServicesPage() {
 
         <main style={{ position: 'relative', zIndex: 1, paddingTop: 100 }}>
 
-          {/* ── PAGE HERO ─────────────────── */}
+          {/* â”€â”€ PAGE HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section style={{ padding: '80px 0 60px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
             <div className="container-main">
               <div className="section-label" style={{ justifyContent: 'center' }}>What I Offer</div>
@@ -99,7 +100,7 @@ export default function ServicesPage() {
               </h1>
               <p style={{ fontSize: 17, color: '#6B7A99', maxWidth: 520, margin: '0 auto 32px', lineHeight: 1.8 }}>
                 Every service I offer is built around one principle: <strong style={{ color: '#F0F2F8' }}>measurable growth</strong>.
-                No vanity metrics — only strategies that move your business forward.
+                No vanity metrics â€” only strategies that move your business forward.
               </p>
               <Link href="/contact" className="btn-primary">
                 <span>Get a Free Consultation</span>
@@ -108,7 +109,7 @@ export default function ServicesPage() {
             </div>
           </section>
 
-          {/* ── MAIN SERVICE PACKAGES ──────── */}
+          {/* â”€â”€ MAIN SERVICE PACKAGES â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section className="section">
             <div className="container-main">
               <div style={{ textAlign: 'center', marginBottom: 60 }}>
@@ -176,7 +177,7 @@ export default function ServicesPage() {
             </div>
           </section>
 
-          {/* ── ADDITIONAL SERVICES ────────── */}
+          {/* â”€â”€ ADDITIONAL SERVICES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section className="section" style={{ background: 'rgba(14,20,32,0.3)' }}>
             <div className="container-main">
               <div style={{ textAlign: 'center', marginBottom: 60 }}>
@@ -199,7 +200,7 @@ export default function ServicesPage() {
             </div>
           </section>
 
-          {/* ── PROCESS ───────────────────── */}
+          {/* â”€â”€ PROCESS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section className="section">
             <div className="container-main">
               <div style={{ textAlign: 'center', marginBottom: 60 }}>
@@ -232,7 +233,7 @@ export default function ServicesPage() {
             </div>
           </section>
 
-          {/* ── CTA ──────────────────────── */}
+          {/* â”€â”€ CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section style={{ padding: '80px 0', textAlign: 'center', background: 'linear-gradient(135deg, rgba(201,168,76,0.06), rgba(0,212,255,0.03))' }}>
             <div className="container-main">
               <Zap size={40} color="#C9A84C" style={{ margin: '0 auto 20px' }} />
@@ -255,4 +256,16 @@ export default function ServicesPage() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const res = await fetch(baseUrl + '/api/pages?slug=services');
+    if (res.ok) {
+      const page = await res.json();
+      return { props: { ssrMeta: { meta_title: page.meta_title || null, meta_description: page.meta_description || null, focus_keyword: page.focus_keyword || null } } };
+    }
+  } catch {}
+  return { props: { ssrMeta: null } };
 }
