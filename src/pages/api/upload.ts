@@ -43,7 +43,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Only authenticated admins can upload files.
   const admin = requireAdmin(req, res);
   if (!admin) {
-    // requireAdmin already sent a 401 — also log for debugging
     console.error('[upload] Rejected: no valid admin session cookie');
     return;
   }
@@ -51,15 +50,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { fileName, data, fileType } = req.body;
 
   if (!fileName || !data) {
+    console.error('[upload] Rejected: fileName or data missing');
     return res.status(400).json({ message: 'fileName and data are required' });
   }
 
-  // Strip base64 prefix if present (e.g. "data:image/png;base64,...")
-  const base64Data = data.replace(/^data:[^;]+;base64,/, '');
+  // Robustly extract the base64 string from the data URI (e.g. "data:image/png;base64,....")
+  const base64Data = data.includes(',') ? data.split(',')[1] : data;
   const buffer = Buffer.from(base64Data, 'base64');
 
   // Enforce a hard 10MB cap on the decoded payload.
   if (buffer.length > 10 * 1024 * 1024) {
+    console.error(`[upload] Rejected: file too large (${buffer.length} bytes)`);
     return res.status(413).json({ message: 'File too large (max 10MB)' });
   }
 
@@ -67,7 +68,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const detected = detectMimeType(buffer, fileType);
   const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
   if (!detected || !allowed.includes(detected)) {
-    return res.status(400).json({ message: 'File type not allowed or unrecognized' });
+    console.error(`[upload] Rejected: Type not allowed. Client provided type: ${fileType}, Magic byte detected: ${detected}`);
+    return res.status(400).json({ message: `File type ${fileType || 'unknown'} not allowed or unrecognized. If this is a valid image, try converting it to JPG or PNG.` });
   }
 
   try {
@@ -79,20 +81,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Sanitize file name and prevent path traversal.
     const safeName = fileName.replace(/[^a-zA-Z0-9._-]/g, '_');
     const extension = detected === 'image/svg+xml' ? 'svg' : detected.split('/')[1];
-    const finalName = safeName.includes('.') ? safeName : `${safeName}.${extension}`;
+    
+    // Check if the filename already has the extension to avoid double extensions like "image.png.png"
+    let finalName = safeName;
+    if (!safeName.toLowerCase().endsWith(`.${extension}`)) {
+      finalName = safeName.includes('.') 
+        ? `${safeName.substring(0, safeName.lastIndexOf('.'))}.${extension}`
+        : `${safeName}.${extension}`;
+    }
+
     const filePath = path.join(uploadDir, path.basename(finalName));
     // Final guard against any "../" style sequences.
     if (!filePath.startsWith(uploadDir)) {
+      console.error(`[upload] Rejected: Invalid file path ${filePath}`);
       return res.status(400).json({ message: 'Invalid file name' });
     }
     fs.writeFileSync(filePath, buffer);
 
+    console.log(`[upload] Success: ${finalName} (${buffer.length} bytes)`);
     return res.status(200).json({
       url: `/uploads/${path.basename(finalName)}`,
       message: 'File uploaded successfully',
     });
   } catch (e) {
     console.error('Upload error:', e);
-    return res.status(500).json({ message: 'File upload failed' });
+    return res.status(500).json({ message: 'File upload failed: ' + String(e) });
   }
 }
