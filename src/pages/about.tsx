@@ -8,27 +8,26 @@ import toast, { Toaster } from 'react-hot-toast';
 import { ArrowRight, Download, CheckCircle, Award, BookOpen, Briefcase } from 'lucide-react';
 
 const values = [
-  { icon: 'ðŸŽ¯', title: 'Results-First', desc: 'Every strategy is built around measurable outcomes and real ROI, not vanity metrics.' },
-  { icon: 'ðŸ¤–', title: 'AI-Augmented', desc: 'I leverage cutting-edge AI tools to find opportunities others miss and execute faster.' },
-  { icon: 'ðŸ“Š', title: 'Data-Driven', desc: 'Every decision is backed by data â€” no guesswork, no shortcuts, no wasted budget.' },
-  { icon: 'ðŸ¤', title: 'Client-Centric', desc: 'I treat your business like my own. Your growth is my personal mission.' },
+  { icon: '🎯', title: 'Results-First', desc: 'Every strategy is built around measurable outcomes and real ROI, not vanity metrics.' },
+  { icon: '🤖', title: 'AI-Augmented', desc: 'I leverage cutting-edge AI tools to find opportunities others miss and execute faster.' },
+  { icon: '📊', title: 'Data-Driven', desc: 'Every decision is backed by data — no guesswork, no shortcuts, no wasted budget.' },
+  { icon: '🤝', title: 'Client-Centric', desc: 'I treat your business like my own. Your growth is my personal mission.' },
 ];
 
 export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
-  // Start with empty string â€” no image is shown until API responds
-  // This prevents the wrong/local fallback path from firing onError before we know the real URL
-  const [profileImage, setProfileImage] = useState('');
-  const [profileImageAlt, setProfileImageAlt] = useState('Pial Mahmud â€” Digital Marketing Expert');
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [aboutImage, setAboutImage] = useState<string | null>(null);
+  const [profileImageAlt, setProfileImageAlt] = useState('Pial Mahmud — Digital Marketing Expert');
   const [imageError, setImageError] = useState(false);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [skills, setSkills] = useState<{name: string, level: number}[]>([]);
   const [experiences, setExperiences] = useState<{role: string, company: string, period: string, desc: string}[]>([]);
   const [aboutTitle, setAboutTitle] = useState('Turning Digital Presence into | Measurable Growth');
   const [aboutIntro, setAboutIntro] = useState("I'm Pial Mahmud, an AI-powered Digital Marketing & SEO Expert based in Bangladesh, working with brands globally. With 5+ years of hands-on experience, I've helped businesses across EdTech, Real Estate, Media, and Technology achieve transformational results.");
-  const [aboutDesc, setAboutDesc] = useState("I combine deep technical SEO expertise with AI tools, creative content strategy, and data-driven campaign management to deliver growth that lasts â€” not just quick wins.");
-  const [yearsExp, setYearsExp] = useState('');
+  const [aboutDesc, setAboutDesc] = useState("I combine deep technical SEO expertise with AI tools, creative content strategy, and data-driven campaign management to deliver growth that lasts — not just quick wins.");
+  const [yearsExp, setYearsExp] = useState('5+');
 
-  // Reset imageError whenever the URL changes so a fresh load attempt is made
+  // Reset imageError whenever the URL changes so a fresh load attempt is made  // Reset imageError whenever the URL changes so a fresh load attempt is made
   useEffect(() => {
     if (profileImage) setImageError(false);
   }, [profileImage]);
@@ -55,9 +54,10 @@ export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
           const data = await settingsRes.json();
           // /api/settings?home=1 returns { settings: {...}, home: {...} }
           const s = data.settings || data;
-          // Always set profileImage from API â€” even if empty string,
+          // Always set profileImage/aboutImage from API — even if empty string,
           // so we don't render a broken local path
           setProfileImage(s.profile_image || '');
+          setAboutImage(s.about_image || '');
           if (s.profile_image_alt_text) setProfileImageAlt(s.profile_image_alt_text);
           setImageError(false); // reset on fresh data
           if (s.about_title) setAboutTitle(s.about_title);
@@ -74,7 +74,7 @@ export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
             setExperiences(expData.sort((a,b) => (a.display_order || 0) - (b.display_order || 0)).map(e => ({
               role: e.job_title,
               company: e.company_name,
-              period: `${e.start_date ? new Date(e.start_date).getFullYear() : ''} â€” ${e.is_current ? 'Present' : (e.end_date ? new Date(e.end_date).getFullYear() : '')}`,
+              period: `${e.start_date ? new Date(e.start_date).getFullYear() : ''} — ${e.is_current ? 'Present' : (e.end_date ? new Date(e.end_date).getFullYear() : '')}`,
               desc: e.description
             })));
           }
@@ -133,12 +133,12 @@ export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
                         <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #111827, #0E1420)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <div style={{ width: 40, height: 40, borderRadius: '50%', border: '2px solid rgba(201,168,76,0.4)', borderTopColor: '#C9A84C', animation: 'spin 1s linear infinite' }} />
                         </div>
-                      ) : imageError || !profileImage ? (
+                      ) : imageError || (!aboutImage && !profileImage) ? (
                         <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'linear-gradient(135deg, #C9A84C, #A07830)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 42, fontWeight: 700, color: '#080B14' }}>P</div>
                       ) : (
                         <img
-                          key={profileImage}
-                          src={profileImage}
+                          key={aboutImage || profileImage || 'default'}
+                          src={aboutImage || profileImage || '/images/about-pial.jpg'}
                           alt={profileImageAlt || 'Pial Mahmud'}
                           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
                           onError={() => setImageError(true)}
