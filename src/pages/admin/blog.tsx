@@ -115,6 +115,7 @@ export default function BlogCms() {
 
   useEffect(() => {
     loadPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Live SEO score calculator

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
@@ -195,7 +195,7 @@ export default function CaseStudiesPage({ ssrMeta }: { ssrMeta?: any }) {
             <div className="container-main">
               <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
                 {caseStudies.map((cs, i) => (
-                  <div className="case-study-card grid-2col" style={{ minHeight: 0 }}>
+                  <div key={i} className="case-study-card grid-2col" style={{ minHeight: 0 }}>
                     
                     {/* Left â€” Content */}
                     <div style={{ padding: 40 }}>

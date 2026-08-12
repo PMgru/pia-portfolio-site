@@ -398,7 +398,6 @@ export class JsonDb {
   private static cache: DbSchema | null = null;
 
   private static readRaw(): DbSchema {
-    if (this.cache) return this.cache;
     try {
       if (!fs.existsSync(DB_DIR)) {
         try { fs.mkdirSync(DB_DIR, { recursive: true }); } catch {}
@@ -463,6 +462,7 @@ export class JsonDb {
       return parsed;
     } catch (e) {
       console.error('Error reading database, using fallback initial data', e);
+      if (this.cache) return this.cache;
       const data = getInitialData();
       this.cache = data;
       return data;

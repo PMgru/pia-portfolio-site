@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { ChevronDown, Sparkles } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Hero() {
   const [initText, setInitText] = useState('');
@@ -72,18 +73,18 @@ export default function Hero() {
 
           {/* Call To Actions */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-10">
-            <a 
+            <Link 
               href="/#projects" 
               className="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-bold tracking-wide bg-gradient-to-r from-[#B76E79] to-[#E63946] shadow-lg shadow-[#B76E79]/20 hover:scale-105 active:scale-95 transition-all duration-300"
             >
               Explore My Universe →
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/#calculator" 
               className="w-full sm:w-auto px-8 py-4 rounded-xl text-[#F4F4F9] font-bold border border-[#B76E79]/30 bg-white/5 hover:bg-white/10 hover:border-[#B76E79]/60 active:scale-95 transition-all duration-300"
             >
               Calculate Your ROI 🚀
-            </a>
+            </Link>
           </div>
 
           {/* Typing Terminal status console */}

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Calculator, ArrowRight, TrendingUp, Sparkles, DollarSign } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import Link from 'next/link';
 
 export default function RoiCalculator() {
   const [traffic, setTraffic] = useState<number>(10000);
@@ -201,12 +202,12 @@ export default function RoiCalculator() {
 
                 </div>
 
-                <a 
+                <Link 
                   href="/#contact"
                   className="w-full py-3.5 mt-auto rounded-xl text-center text-white font-bold bg-white/5 border border-[#B76E79]/30 hover:bg-[#B76E79]/20 transition-all flex items-center justify-center gap-2"
                 >
                   Let's Make This Happen <ArrowRight className="w-4 h-4" />
-                </a>
+                </Link>
 
               </div>
             ) : (

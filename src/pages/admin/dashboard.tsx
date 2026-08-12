@@ -89,6 +89,7 @@ export default function AnalyticsDashboard() {
     fetchStats();
     pollRef.current = setInterval(fetchStats, 10000);
     return () => { if (pollRef.current) clearInterval(pollRef.current); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading || !stats) {
