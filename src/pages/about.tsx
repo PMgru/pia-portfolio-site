@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
@@ -17,7 +17,7 @@ const values = [
 export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [aboutImage, setAboutImage] = useState<string | null>(null);
-  const [profileImageAlt, setProfileImageAlt] = useState('Pial Mahmud — Digital Marketing Expert');
+  const [profileImageAlt, setProfileImageAlt] = useState('Top SEO Expert In The World');
   const [imageError, setImageError] = useState(false);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [skills, setSkills] = useState<{name: string, level: number}[]>([]);
@@ -58,7 +58,7 @@ export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
           // so we don't render a broken local path
           setProfileImage(s.profile_image || '');
           setAboutImage(s.about_image || '');
-          if (s.profile_image_alt_text) setProfileImageAlt(s.profile_image_alt_text);
+          setProfileImageAlt('Top SEO Expert In The World');
           setImageError(false); // reset on fresh data
           if (s.about_title) setAboutTitle(s.about_title);
           if (s.about_intro) setAboutIntro(s.about_intro);
