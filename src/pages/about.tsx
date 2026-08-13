@@ -138,7 +138,7 @@ export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
                       ) : (
                         <img
                           key={aboutImage || profileImage || 'default'}
-                          src={aboutImage || profileImage || '/images/about-pial.jpg'}
+                          src={aboutImage || profileImage || '/images/about-pial-v2.jpg'}
                           alt={profileImageAlt || 'Pial Mahmud'}
                           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
                           onError={() => setImageError(true)}
