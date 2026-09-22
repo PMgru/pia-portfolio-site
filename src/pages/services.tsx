@@ -9,17 +9,17 @@ import { ArrowRight, CheckCircle, ChevronRight, Zap } from 'lucide-react';
 // services loaded from API
 
 const additionalServices = [
-  { icon: 'ðŸ“Š', title: 'Analytics & Reporting', desc: 'Deep-dive analytics setup with custom dashboards and monthly performance reports.' },
+  { icon: '📊', title: 'Analytics & Reporting', desc: 'Deep-dive analytics setup with custom dashboards and monthly performance reports.' },
   { icon: 'âœï¸', title: 'Content Strategy & Creation', desc: 'Blog posts, landing pages, and social content that rank and convert.' },
-  { icon: 'ðŸ”—', title: 'Link Building Campaigns', desc: 'White-hat outreach to build high-DA backlinks that boost your authority.' },
-  { icon: 'ðŸ›’', title: 'E-commerce SEO', desc: 'Product page optimization, category SEO, and shopping campaigns for online stores.' },
-  { icon: 'ðŸ“±', title: 'Social Media Management', desc: 'Content calendars, posting schedules, and engagement strategies for all platforms.' },
-  { icon: 'ðŸ’Œ', title: 'Email Marketing', desc: 'List building, automation sequences, and campaign design that drives revenue.' },
+  { icon: '🔗', title: 'Link Building Campaigns', desc: 'White-hat outreach to build high-DA backlinks that boost your authority.' },
+  { icon: '🛒', title: 'E-commerce SEO', desc: 'Product page optimization, category SEO, and shopping campaigns for online stores.' },
+  { icon: '📱', title: 'Social Media Management', desc: 'Content calendars, posting schedules, and engagement strategies for all platforms.' },
+  { icon: '💌', title: 'Email Marketing', desc: 'List building, automation sequences, and campaign design that drives revenue.' },
 ];
 
 const defaultServices = [
   {
-    icon: 'ðŸš€',
+    icon: '🚀',
     title: 'AI-Powered SEO Strategy',
     subtitle: 'Dominate Search Rankings',
     desc: 'Advanced technical SEO, entity-based optimization, and programmatic content scaling engineered to beat search algorithms.',
@@ -28,7 +28,7 @@ const defaultServices = [
     popular: true
   },
   {
-    icon: 'ðŸŽ¯',
+    icon: '🎯',
     title: 'Growth Marketing & Paid Ads',
     subtitle: 'High-ROAS Ad Campaigns',
     desc: 'Data-backed Google Ads, Meta Ads, and multi-channel performance marketing optimized for maximum conversion rate and lowest CAC.',
@@ -37,7 +37,7 @@ const defaultServices = [
     popular: false
   },
   {
-    icon: 'ðŸ¤–',
+    icon: '🤖',
     title: 'AI Marketing & Automation',
     subtitle: 'Leverage Next-Gen AI',
     desc: 'Custom AI workflows, automated lead nurturing, chatbot integrations, and predictive analytics to scale your operations effortlessly.',
@@ -62,7 +62,7 @@ export default function ServicesPage({ ssrMeta }: { ssrMeta?: any }) {
     fetch('/api/services').then(res => res.json()).then(data => {
       if (Array.isArray(data) && data.length > 0) {
         setServices(data.sort((a,b) => (a.display_order || 0) - (b.display_order || 0)).map((s, i) => ({
-          icon: s.icon || 'ðŸŽ¯',
+          icon: s.icon || '🎯',
           title: s.title,
           subtitle: '',
           desc: s.description,
