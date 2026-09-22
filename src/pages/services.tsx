@@ -10,7 +10,7 @@ import { ArrowRight, CheckCircle, ChevronRight, Zap } from 'lucide-react';
 
 const additionalServices = [
   { icon: '📊', title: 'Analytics & Reporting', desc: 'Deep-dive analytics setup with custom dashboards and monthly performance reports.' },
-  { icon: 'âœï¸', title: 'Content Strategy & Creation', desc: 'Blog posts, landing pages, and social content that rank and convert.' },
+  { icon: '✍️', title: 'Content Strategy & Creation', desc: 'Blog posts, landing pages, and social content that rank and convert.' },
   { icon: '🔗', title: 'Link Building Campaigns', desc: 'White-hat outreach to build high-DA backlinks that boost your authority.' },
   { icon: '🛒', title: 'E-commerce SEO', desc: 'Product page optimization, category SEO, and shopping campaigns for online stores.' },
   { icon: '📱', title: 'Social Media Management', desc: 'Content calendars, posting schedules, and engagement strategies for all platforms.' },
@@ -50,9 +50,9 @@ const defaultServices = [
 const processSteps = [
   { step: '01', title: 'Discovery Call', desc: 'We start with a free 30-minute call to understand your goals, challenges, and budget.' },
   { step: '02', title: 'Audit & Research', desc: 'Deep analysis of your current digital presence, competitors, and market opportunities.' },
-  { step: '03', title: 'Strategy Proposal', desc: 'A custom roadmap with clear goals, timelines, and expected outcomes â€” no fluff.' },
+  { step: '03', title: 'Strategy Proposal', desc: 'A custom roadmap with clear goals, timelines, and expected outcomes — no fluff.' },
   { step: '04', title: 'Execution', desc: 'I execute the strategy with full transparency, weekly updates, and real-time reporting.' },
-  { step: '05', title: 'Optimize & Scale', desc: 'Continuous optimization based on data â€” refining what works and doubling down on wins.' },
+  { step: '05', title: 'Optimize & Scale', desc: 'Continuous optimization based on data — refining what works and doubling down on wins.' },
 ];
 
 export default function ServicesPage({ ssrMeta }: { ssrMeta?: any }) {
@@ -78,7 +78,7 @@ export default function ServicesPage({ ssrMeta }: { ssrMeta?: any }) {
     <>
       <SEO
         slug="services"
-        fallbackTitle="Digital Marketing & SEO Services â€” Pial Mahmud"
+        fallbackTitle="Digital Marketing & SEO Services — Pial Mahmud"
         fallbackDescription="Explore Pial Mahmud's premium digital marketing services including Technical SEO, GEO & AEO AI search optimization, PPC, and Next.js Web Development."
         fallbackKeywords="SEO Services, Generative Engine Optimization, Technical SEO Audit, Meta Ads, Next.js Web Development"
               ssrMeta={ssrMeta}
@@ -100,7 +100,7 @@ export default function ServicesPage({ ssrMeta }: { ssrMeta?: any }) {
               </h1>
               <p style={{ fontSize: 17, color: '#6B7A99', maxWidth: 520, margin: '0 auto 32px', lineHeight: 1.8 }}>
                 Every service I offer is built around one principle: <strong style={{ color: '#F0F2F8' }}>measurable growth</strong>.
-                No vanity metrics â€” only strategies that move your business forward.
+                No vanity metrics — only strategies that move your business forward.
               </p>
               <Link href="/contact" className="btn-primary">
                 <span>Get a Free Consultation</span>
