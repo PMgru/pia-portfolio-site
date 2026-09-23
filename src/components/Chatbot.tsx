@@ -10,7 +10,7 @@ interface ChatMessage {
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { sender: 'bot', text: 'Welcome! I am Pial\'s AI Concierge. Ask me anything about Pial\'s achievements, services, rates, or availability!' }
+    { sender: 'bot', text: 'Welcome! I am on Pial\'s team. How can we help you scale your business and drive more sales today?' }
   ]);
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(false);
@@ -65,7 +65,7 @@ export default function Chatbot() {
         >
           <MessageSquare className="w-6 h-6" />
           <span className="absolute right-full mr-3 py-1.5 px-3 rounded-lg text-xs font-semibold uppercase tracking-wider text-[#F0F2F8] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none" style={{ background: '#0E1420', border: '1px solid rgba(201,168,76,0.2)' }}>
-            Chat with AI Concierge
+            Chat with Sales Concierge
           </span>
           {/* Pulse dot */}
           <span className="absolute -top-1 -right-1 w-3.5 h-3.5 border-2 border-[#0A0A0F] rounded-full animate-ping" style={{ background: '#C9A84C' }}></span>
@@ -81,7 +81,7 @@ export default function Chatbot() {
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center text-[#080B14] font-bold text-sm" style={{ background: 'linear-gradient(135deg, #C9A84C, #A07830)' }}>PM</div>
               <div className="flex flex-col">
-                <span className="text-white text-sm font-bold font-headings leading-none">AI Concierge</span>
+                <span className="text-white text-sm font-bold font-headings leading-none">Sales Concierge</span>
                 <span className="text-[#9AA5B4] text-[10px] uppercase font-semibold tracking-wider flex items-center gap-1 mt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Online
                 </span>

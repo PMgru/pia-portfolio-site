@@ -99,6 +99,50 @@ export default function App({ Component, pageProps }: AppProps) {
           return "Linux";
         };
 
+        const getGeoInfo = async () => {
+          try {
+            if (sessionStorage.getItem('pm_geo')) return JSON.parse(sessionStorage.getItem('pm_geo')!);
+            
+            let ip, country;
+            
+            // Primary API: ipwho.is (fast, generous limits, returns full country name)
+            try {
+              const r1 = await fetch('https://ipwho.is/');
+              const d1 = await r1.json();
+              if (d1.success && d1.ip && d1.country) { ip = d1.ip; country = d1.country; }
+            } catch(e) {}
+
+            // Secondary API: get.geojs.io
+            if (!ip || !country) {
+              try {
+                const r2 = await fetch('https://get.geojs.io/v1/ip/geo.json');
+                const d2 = await r2.json();
+                if (d2.ip && d2.country) { ip = d2.ip; country = d2.country; }
+              } catch(e) {}
+            }
+            
+            // Tertiary API: ipapi.co
+            if (!ip || !country) {
+              try {
+                const r3 = await fetch('https://ipapi.co/json/');
+                const d3 = await r3.json();
+                if (d3.ip && d3.country_name) { ip = d3.ip; country = d3.country_name; }
+              } catch(e) {}
+            }
+
+            if (ip && country) {
+              const geo = { country, ip };
+              sessionStorage.setItem('pm_geo', JSON.stringify(geo));
+              return geo;
+            }
+          } catch(e) {}
+          
+          // Absolute fallback if ad-blocker completely blocks all external fetches
+          return { country: 'Bangladesh', ip: '127.0.0.1' };
+        };
+
+        const geo = await getGeoInfo();
+
         await fetch('/api/analytics?action=track', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -109,7 +153,8 @@ export default function App({ Component, pageProps }: AppProps) {
             device_type: getDeviceType(),
             browser: getBrowser(),
             os: getOS(),
-            country: 'Bangladesh', // Local fallback
+            country: geo.country,
+            client_ip: geo.ip,
           })
         });
       } catch (e) {

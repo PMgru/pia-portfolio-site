@@ -66,7 +66,7 @@ const DEFAULT_CASE_STUDIES = [
       { label: 'Website Traffic', value: '+290%' },
       { label: 'LinkedIn Leads', value: '+85/mo' },
       { label: 'Enterprise Inquiries', value: '+3x' },
-      { label: 'DA Score', value: 'DA 38â†’52' },
+      { label: 'DA Score', value: 'DA 38→52' },
     ],
     accent: '#F59E0B',
     result: 'Secured 3 enterprise contracts within 6 months',
@@ -77,10 +77,10 @@ const DEFAULT_CASE_STUDIES = [
     tag: 'Technology Â· SEO Strategy',
     logo: '/images/clients/hena.svg',
     title: 'Reduced Customer Acquisition Cost by 45% with Organic SEO',
-    excerpt: 'A tech company was over-reliant on paid ads. I shifted their strategy toward organic growth â€” optimizing their product pages, building authority content, and targeting long-tail commercial keywords.',
+    excerpt: 'A tech company was over-reliant on paid ads. I shifted their strategy toward organic growth — optimizing their product pages, building authority content, and targeting long-tail commercial keywords.',
     metrics: [
       { label: 'CAC Reduction', value: '-45%' },
-      { label: 'Organic Share', value: '18%â†’67%' },
+      { label: 'Organic Share', value: '18%→67%' },
       { label: 'Blog Traffic', value: '+320%' },
       { label: 'Demo Requests', value: '+2.4x' },
     ],
@@ -97,7 +97,7 @@ const DEFAULT_CASE_STUDIES = [
     metrics: [
       { label: 'Social Followers', value: '50K+' },
       { label: 'Foot Traffic', value: '+140%' },
-      { label: 'Google Reviews', value: '4.9â˜… (800+)' },
+      { label: 'Google Reviews', value: '4.9★ (800+)' },
       { label: 'Monthly Reach', value: '1.2M' },
     ],
     accent: '#F97316',
@@ -144,7 +144,7 @@ export default function CaseStudiesPage({ ssrMeta }: { ssrMeta?: any }) {
     <>
       <SEO
         slug="case-studies"
-        fallbackTitle="Case Studies â€” Proven SEO & Digital Marketing Results | Pial Mahmud"
+        fallbackTitle="Case Studies — Proven SEO & Digital Marketing Results | Pial Mahmud"
         fallbackDescription="Real campaigns. Real results. Explore case studies showing 400%+ traffic growth, high ROAS, and measurable ROI across EdTech, Real Estate, and Tech industries."
         fallbackKeywords="SEO Case Studies, Digital Marketing Results, Organic Traffic Growth, SEO ROI"
               ssrMeta={ssrMeta}
@@ -156,7 +156,7 @@ export default function CaseStudiesPage({ ssrMeta }: { ssrMeta?: any }) {
 
         <main style={{ position: 'relative', zIndex: 1, paddingTop: 100 }}>
 
-          {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── HERO ─────────────────────────────────── */}
           <section style={{ padding: '80px 0 60px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
             <div className="container-main">
               <div className="section-label" style={{ justifyContent: 'center' }}>Proven Results</div>
@@ -171,7 +171,7 @@ export default function CaseStudiesPage({ ssrMeta }: { ssrMeta?: any }) {
             </div>
           </section>
 
-          {/* â”€â”€ STATS BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── STATS BAR ──────────────────────────── */}
           <section style={{ padding: '40px 0', background: 'rgba(14,20,32,0.4)', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
             <div className="container-main">
               <div className="grid-4col" style={{ gap: 24, textAlign: 'center' }}>
@@ -190,14 +190,14 @@ export default function CaseStudiesPage({ ssrMeta }: { ssrMeta?: any }) {
             </div>
           </section>
 
-          {/* â”€â”€ CASE STUDIES GRID â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── CASE STUDIES GRID ─────────────────── */}
           <section className="section">
             <div className="container-main">
               <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
                 {caseStudies.map((cs, i) => (
                   <div key={i} className="case-study-card grid-2col" style={{ minHeight: 0 }}>
                     
-                    {/* Left â€” Content */}
+                    {/* Left — Content */}
                     <div style={{ padding: 40 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
                         <div style={{
@@ -255,7 +255,7 @@ export default function CaseStudiesPage({ ssrMeta }: { ssrMeta?: any }) {
                       </Link>
                     </div>
 
-                    {/* Right â€” Metrics */}
+                    {/* Right — Metrics */}
                     <div style={{
                       background: 'rgba(8,11,20,0.6)', padding: 40,
                       display: 'flex', flexDirection: 'column', justifyContent: 'center',
@@ -283,7 +283,7 @@ export default function CaseStudiesPage({ ssrMeta }: { ssrMeta?: any }) {
             </div>
           </section>
 
-          {/* â”€â”€ CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── CTA ─────────────────────────────────── */}
           <section style={{ padding: '80px 0', textAlign: 'center', background: 'linear-gradient(135deg, rgba(201,168,76,0.06), rgba(0,212,255,0.03))' }}>
             <div className="container-main">
               <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, color: '#F0F2F8', marginBottom: 20 }}>

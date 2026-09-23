@@ -6,11 +6,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // Track page hit
   if (req.method === 'POST' && action === 'track') {
-    const { session_id, page_path, referrer, device_type, browser, os, country } = req.body;
+    const { session_id, page_path, referrer, device_type, browser, os, country, client_ip } = req.body;
 
     const event = {
       session_id: session_id || 'unknown_session',
-      visitor_id: req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'anonymous',
+      visitor_id: (client_ip && client_ip !== 'Unknown') ? client_ip : (req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'anonymous'),
       event_type: 'pageview',
       page_path: page_path || '/',
       referrer: referrer || 'Direct',
@@ -37,7 +37,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const event = {
       session_id,
-      visitor_id: req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'anonymous',
+      visitor_id: existing?.visitor_id || req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'anonymous',
       event_type: 'ping',
       page_path: page_path || '/',
       referrer: existing?.referrer || 'Direct',
@@ -139,12 +139,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
       const firstEvent = sEvents[0];
       const lastEvent = sEvents[sEvents.length - 1];
-      const durationMs = new Date(lastEvent.timestamp).getTime() - new Date(firstEvent.timestamp).getTime();
-      totalDurationMs += durationMs;
+      
+      let sessionActiveDurationSec = 0;
 
-      // Check if session is active (last event within last 5 minutes is considered "live" for history viewing)
-      const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
-      const isSessionLive = lastEvent.timestamp >= fiveMinAgo;
+      // Check if session is active (last event within last 20 seconds is considered "live")
+      const twentySecAgo = new Date(Date.now() - 20 * 1000).toISOString();
+      const isSessionLive = lastEvent.timestamp >= twentySecAgo;
 
       // Compile page history with durations
       const history: any[] = [];
@@ -154,9 +154,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         
         let pageDurationSec = 0;
         if (i < sPageviews.length - 1) {
-          // Duration is until the next page view
+          // Duration is until the next page view (cap at 30 mins to avoid absurd numbers if user leaves tab open)
           const nextPv = sPageviews[i + 1];
-          pageDurationSec = Math.round((new Date(nextPv.timestamp).getTime() - pvTime) / 1000);
+          const diffSec = Math.round((new Date(nextPv.timestamp).getTime() - pvTime) / 1000);
+          pageDurationSec = diffSec > 1800 ? 1800 : diffSec;
         } else {
           // Duration of the final page is until the last ping or action on this page
           const samePagePings = sEvents.filter(e => e.event_type === 'ping' && e.page_path === pv.page_path);
@@ -167,27 +168,40 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             pageDurationSec = 0; // visited but left instantly or no heartbeat yet
           }
         }
+        
+        sessionActiveDurationSec += pageDurationSec;
 
-        history.push({
-          path: pv.page_path,
-          duration: pageDurationSec > 0 ? formatSec(pageDurationSec) : 'instantly',
-          timestamp: pv.timestamp
-        });
+        // Collapse consecutive identical paths
+        if (history.length > 0 && history[history.length - 1].path === pv.page_path) {
+          const prev = history[history.length - 1];
+          prev._rawDuration += pageDurationSec;
+          prev.duration = prev._rawDuration > 0 ? formatSec(prev._rawDuration) : 'instantly';
+        } else {
+          history.push({
+            path: pv.page_path,
+            duration: pageDurationSec > 0 ? formatSec(pageDurationSec) : 'instantly',
+            timestamp: pv.timestamp,
+            _rawDuration: pageDurationSec
+          });
+        }
       }
 
       sessionDetailsList.push({
         session_id: sid,
         ip: firstEvent.visitor_id,
         location: firstEvent.country,
+        referrer: firstEvent.referrer,
         device: firstEvent.device_type,
         browser: firstEvent.browser,
         os: firstEvent.os,
         current_page: lastEvent.page_path,
         is_live: isSessionLive,
         last_active: lastEvent.timestamp,
-        time_spent: formatMs(durationMs),
+        time_spent: formatMs(sessionActiveDurationSec * 1000),
         history
       });
+      
+      totalDurationMs += (sessionActiveDurationSec * 1000);
     });
 
     const sessionCount = Object.keys(sessionsData).length;

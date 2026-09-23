@@ -35,7 +35,7 @@ export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
   const handleCvDownload = (e: React.MouseEvent) => {
     e.preventDefault();
     toast('CV is being prepared. Contact Pial directly at hello@pialmahmud.com to request it.', {
-      icon: 'ðŸ“„',
+      icon: '📄',
       style: { background: '#0E1420', color: '#F0F2F8', border: '1px solid rgba(201,168,76,0.25)', fontSize: 13 },
       duration: 5000,
     });
@@ -109,7 +109,7 @@ export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
 
         <main style={{ position: 'relative', zIndex: 1, paddingTop: 100 }}>
 
-          {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── HERO ─────────────────────────── */}
           <section style={{ padding: '80px 0 60px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
             <div className="container-main">
               <div className="grid-2col" style={{ gap: 80, alignItems: 'center' }}>
@@ -205,7 +205,7 @@ export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
             </div>
           </section>
 
-          {/* â”€â”€ VALUES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── VALUES ─────────────────────────── */}
           <section className="section">
             <div className="container-main">
               <div style={{ textAlign: 'center', marginBottom: 60 }}>
@@ -226,7 +226,7 @@ export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
             </div>
           </section>
 
-          {/* â”€â”€ SKILLS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── SKILLS ─────────────────────────── */}
           <section className="section" style={{ background: 'rgba(14,20,32,0.3)' }}>
             <div className="container-main">
               <div className="grid-2col about-skills-grid" style={{ gap: 'clamp(32px, 6vw, 80px)', alignItems: 'start' }}>
@@ -272,7 +272,7 @@ export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
             </div>
           </section>
 
-          {/* â”€â”€ EXPERIENCE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── EXPERIENCE ─────────────────────────── */}
           <section className="section">
             <div className="container-main">
               <div style={{ textAlign: 'center', marginBottom: 60 }}>
@@ -314,7 +314,7 @@ export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
             </div>
           </section>
 
-          {/* â”€â”€ CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── CTA ─────────────────────────── */}
           <section style={{ padding: '80px 0', textAlign: 'center', background: 'rgba(14,20,32,0.3)' }}>
             <div className="container-main">
               <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, color: '#F0F2F8', marginBottom: 20 }}>

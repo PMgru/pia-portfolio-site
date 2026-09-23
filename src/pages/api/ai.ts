@@ -3,9 +3,8 @@ import { requireAdmin } from '@/lib/auth';
 import axios from 'axios';
 
 // Server-side only — never exposed to the client bundle.
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const AI_MODEL = process.env.OPENROUTER_MODEL || 'meta-llama/llama-3.1-8b-instruct:free';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -16,10 +15,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!requireAdmin(req, res)) return;
 
   const { type, content, context, openrouter_api_key } = req.body;
+  // Note: the client form might still send openrouter_api_key out of habit,
+  // but we will prioritize the server-side GEMINI_API_KEY.
   const requestKey = typeof openrouter_api_key === 'string' && openrouter_api_key.trim()
     ? openrouter_api_key.trim()
     : '';
-  const apiKey = requestKey || OPENROUTER_API_KEY;
+  const apiKey = requestKey || GEMINI_API_KEY;
 
   if (!type) {
     return res.status(400).json({ message: 'Missing generation type' });
@@ -42,26 +43,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       const response = await axios.post(
-        OPENROUTER_URL,
+        `${GEMINI_URL}?key=${apiKey}`,
         {
-          model: AI_MODEL,
-          messages: [{ role: 'user', content: prompt }],
-          temperature: 0.7,
-          max_tokens: 800,
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 800 }
         },
         {
           headers: {
-            'Authorization': `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
           },
-          timeout: 7000,
+          timeout: 10000,
         }
       );
 
-      const aiText = response.data.choices[0].message.content.trim();
+      const aiText = response.data.candidates[0].content.parts[0].text.trim();
       return res.status(200).json({ result: aiText, source: 'ai_copilot' });
-    } catch (e) {
-      console.error('OpenRouter call failed, falling back to mock generator', e);
+    } catch (e: any) {
+      console.error('Gemini call failed, falling back to mock generator', e?.response?.data || e.message);
     }
   }
 

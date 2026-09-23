@@ -168,21 +168,7 @@ export default function AdminLogin() {
               Enter your credentials to access the admin suite.
             </p>
 
-            {/* Demo Credentials Notice */}
-            <div style={{
-              padding: '12px 16px', borderRadius: 10, marginBottom: 28,
-              background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.15)',
-            }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: '#C9A84C', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                💡 Demo Credentials
-              </div>
-              <div style={{ fontSize: 12, color: '#9CA3AF' }}>
-                Email: <strong style={{ color: '#F0F2F8' }}>pial@pialmahmud.com</strong>
-              </div>
-              <div style={{ fontSize: 12, color: '#9CA3AF', marginTop: 2 }}>
-                Password: <strong style={{ color: '#F0F2F8' }}>admin123</strong>
-              </div>
-            </div>
+
 
             <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 

@@ -4,9 +4,8 @@ import { requireAdmin } from '@/lib/auth';
 import axios from 'axios';
 
 // Server-side only — never exposed to the client bundle.
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const AI_MODEL = process.env.OPENROUTER_MODEL || 'meta-llama/llama-3.1-8b-instruct:free';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { action, id } = req.query;
@@ -19,75 +18,136 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const requestKey = typeof openrouter_api_key === 'string' && openrouter_api_key.trim()
       ? openrouter_api_key.trim()
       : '';
-    const openRouterKey = requestKey || OPENROUTER_API_KEY;
+    const apiKey = requestKey || GEMINI_API_KEY;
 
     const knowledge = JsonDb.getCollection('chatbot_knowledge');
 
-    // 1. Try local exact or keyword match first
-    const qLower = question.toLowerCase();
-    let bestMatch = null;
-    let maxOverlap = 0;
+    const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-    for (const item of knowledge) {
-      const qWords = item.question.toLowerCase().split(/\s+/);
-      let overlap = 0;
-      for (const word of qWords) {
-        if (word.length > 3 && qLower.includes(word)) {
-          overlap++;
-        }
-      }
-      if (overlap > maxOverlap) {
-        maxOverlap = overlap;
-        bestMatch = item;
-      }
-    }
+    // Determine the active keys
+    // If user provided a key via frontend, use it for OpenRouter. Otherwise fallback to env.
+    const activeOpenRouterKey = requestKey || (OPENROUTER_API_KEY !== 'your_openrouter_api_key_here' ? OPENROUTER_API_KEY : null);
+    
+    // We only try Tier 1 if we have a direct Gemini env key
+    const hasDirectGeminiKey = GEMINI_API_KEY && GEMINI_API_KEY !== 'undefined';
 
-    // Threshold match
-    if (maxOverlap >= 2 && bestMatch) {
-      return res.status(200).json({ answer: bestMatch.answer, source: 'knowledge_base' });
-    }
+    console.log('--- CHATBOT DEBUG ---');
+    console.log('Frontend provided key:', requestKey ? 'YES' : 'NO');
+    console.log('ENV OpenRouter key:', OPENROUTER_API_KEY ? 'YES' : 'NO');
+    console.log('Active OpenRouter key:', activeOpenRouterKey ? 'YES' : 'NO');
+    console.log('Has Direct Gemini key:', hasDirectGeminiKey ? 'YES' : 'NO');
+    console.log('---------------------');
 
-    // 2. Try LLM fallback if OpenRouter key is set
-    if (openRouterKey && openRouterKey !== 'undefined') {
+    // If neither key is available, we can't do AI
+    if (!hasDirectGeminiKey && !activeOpenRouterKey) {
+      // Fallback to heuristic immediately if no keys
+    } else {
       try {
         const kbContext = knowledge.map(k => `Q: ${k.question}\nA: ${k.answer}`).join('\n\n');
-        const systemPrompt = `You are a premium AI Concierge Chatbot on the portfolio website of Pial Mahmud, a Digital Marketing & SEO Growth Expert.
-Your purpose is to answer questions about Pial based on the knowledge base below.
-Rules:
-- Be concise, professional, and slightly conversational.
-- ONLY answer about Pial's services, portfolio, experience, and skills.
-- If you do not know the answer, politely ask them to drop a message in the contact form or email hello@pialmahmud.com.
-- Do not make up false facts.
+        const systemPrompt = `You are an elite, highly persuasive human Sales Executive & Concierge for Pial Mahmud, a Top 1% SEO & Digital Marketing Expert. You act completely human—warm, empathetic, extremely smart, confident, and highly consultative. Your sole objective is to CONVERT visitors into paying clients and drive sales.
+
+Core Rules & Behavior:
+1. EXTREME HUMAN LIKENESS: Never mention you are an AI, bot, or virtual assistant. You are a real human sales expert on Pial's team. Use conversational, friendly, empathetic, and persuasive language. Show excitement for their business growth.
+2. SMART CONSULTATION: Build trust instantly. If they ask about services, don't just list them; explain the VALUE and how Pial's data-driven strategies guarantee ROI and exponential business growth.
+3. PROFESSIONAL SELLING: Do not just give dry information. Always guide the conversation towards closing a deal, booking a consultation, or starting a project.
+4. AUTHORIZED TO NEGOTIATE & OFFER DISCOUNTS: You have full authority to negotiate pricing and strategically offer custom discounts (e.g., 10% to 30% off, or a free initial audit) to close a deal on the spot. If the client seems hesitant, asks about pricing, or complains about budget, immediately offer a tailored discount. Frame it as a "special limited-time offer" you are applying for them today.
+5. OBJECTION HANDLING: Like an expert salesman, smoothly handle objections. If they say it's too expensive, pivot to the ROI and offer a discount.
+6. KNOWLEDGE & PIVOTING: Base your facts on the Knowledge Base. If you don't know something, confidently pivot to how Pial can solve their problems and urge them to take action.
+7. ACTION-ORIENTED CLOSING: Keep responses engaging, punchy, and concise. Always end every message with a strong call-to-action (e.g., "Shall we lock in this 20% discount for you right now?", "Can I set up a quick 15-min discovery call with Pial to get started?").
+8. LEAD CAPTURE: If they are ready to buy or accept a discount, ask for their email/phone number to follow up.
+9. BREVITY: Keep your responses extremely short, punchy, and impactful (1 to 3 sentences max). Do NOT write long paragraphs.
 
 Knowledge Base:
 ${kbContext}
 
 Conversation History:
-${(history || []).map((h: any) => `${h.sender === 'user' ? 'User' : 'Assistant'}: ${h.text}`).join('\n')}
-User: ${question}
-Assistant:`;
+${(history || []).map((h: any) => `${h.sender === 'user' ? 'Client' : "Pial's Assistant"}: ${h.text}`).join('\n')}
+Client: ${question}
+Pial's Assistant:`;
 
-        const response = await axios.post(
-          OPENROUTER_URL,
-          {
-            model: AI_MODEL,
-            messages: [{ role: 'user', content: systemPrompt }],
-            temperature: 0.5,
-            max_tokens: 300,
-          },
-          {
-            headers: {
-              'Authorization': `Bearer ${openRouterKey}`,
-              'Content-Type': 'application/json',
-            },
-            timeout: 5000,
+        const messagesForOpenRouter = [
+           { role: 'system', content: systemPrompt }
+        ];
+
+        let answer = null;
+        let finalSource = '';
+
+        // TIER 1: Direct Google API (gemini-flash-latest) - Only if we have the specific direct key
+        if (hasDirectGeminiKey) {
+          try {
+            const res1 = await axios.post(
+              `${GEMINI_URL}?key=${GEMINI_API_KEY}`,
+              {
+                contents: [{ parts: [{ text: systemPrompt }] }],
+                generationConfig: { temperature: 0.7, maxOutputTokens: 100 }
+              },
+              { headers: { 'Content-Type': 'application/json' }, timeout: 15000 } // Back to 15s because 8s is timing out!
+            );
+            answer = res1.data.candidates[0].content.parts[0].text.trim();
+            finalSource = 'ai_engine_tier_1_gemini';
+          } catch (err1: any) {
+            console.warn('Tier 1 (Direct Gemini) failed:', err1?.response?.data || err1.message);
           }
-        );
+        }
 
-        const answer = response.data.choices[0].message.content.trim();
-        return res.status(200).json({ answer, source: 'ai_engine' });
-      } catch (err) {
-        console.error('LLM Fallback failed, utilizing heuristic fallback', err);
+        // TIER 2: OpenRouter (google/gemini-1.5-flash)
+        if (!answer && activeOpenRouterKey) {
+          try {
+            const res2 = await axios.post(
+              'https://openrouter.ai/api/v1/chat/completions',
+              {
+                model: 'google/gemini-1.5-flash',
+                messages: messagesForOpenRouter,
+                temperature: 0.7,
+                max_tokens: 100
+              },
+              {
+                headers: {
+                  'Authorization': `Bearer ${activeOpenRouterKey}`,
+                  'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+                  'Content-Type': 'application/json'
+                },
+                timeout: 12000
+              }
+            );
+            answer = res2.data.choices[0].message.content.trim();
+            finalSource = 'ai_engine_tier_2_or_gemini';
+          } catch (err2: any) {
+            console.warn('Tier 2 (OR Gemini) failed:', err2?.response?.data || err2.message);
+
+            // TIER 3: OpenRouter (Llama 3.1 8B Free)
+            try {
+              const res3 = await axios.post(
+                'https://openrouter.ai/api/v1/chat/completions',
+                {
+                  model: 'meta-llama/llama-3.1-8b-instruct:free',
+                  messages: messagesForOpenRouter,
+                  temperature: 0.7,
+                  max_tokens: 100
+                },
+                {
+                  headers: {
+                    'Authorization': `Bearer ${activeOpenRouterKey}`,
+                    'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+                    'Content-Type': 'application/json'
+                  },
+                  timeout: 12000
+                }
+              );
+              answer = res3.data.choices[0].message.content.trim();
+              finalSource = 'ai_engine_tier_3_or_llama';
+            } catch (err3: any) {
+              console.warn('Tier 3 (OR Llama) failed:', err3?.response?.data || err3.message);
+            }
+          }
+        }
+
+        if (answer) {
+          return res.status(200).json({ answer, source: finalSource });
+        }
+        console.error('All AI Tiers failed, utilizing heuristic fallback');
+      } catch (fatalErr: any) {
+        console.error('Fatal error during AI cascade evaluation', fatalErr.message);
       }
     }
 

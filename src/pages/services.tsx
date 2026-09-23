@@ -90,7 +90,7 @@ export default function ServicesPage({ ssrMeta }: { ssrMeta?: any }) {
 
         <main style={{ position: 'relative', zIndex: 1, paddingTop: 100 }}>
 
-          {/* â”€â”€ PAGE HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── PAGE HERO ─────────────────── */}
           <section style={{ padding: '80px 0 60px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
             <div className="container-main">
               <div className="section-label" style={{ justifyContent: 'center' }}>What I Offer</div>
@@ -109,7 +109,7 @@ export default function ServicesPage({ ssrMeta }: { ssrMeta?: any }) {
             </div>
           </section>
 
-          {/* â”€â”€ MAIN SERVICE PACKAGES â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── MAIN SERVICE PACKAGES ──────── */}
           <section className="section">
             <div className="container-main">
               <div style={{ textAlign: 'center', marginBottom: 60 }}>
@@ -177,7 +177,7 @@ export default function ServicesPage({ ssrMeta }: { ssrMeta?: any }) {
             </div>
           </section>
 
-          {/* â”€â”€ ADDITIONAL SERVICES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── ADDITIONAL SERVICES ────────── */}
           <section className="section" style={{ background: 'rgba(14,20,32,0.3)' }}>
             <div className="container-main">
               <div style={{ textAlign: 'center', marginBottom: 60 }}>
@@ -200,7 +200,7 @@ export default function ServicesPage({ ssrMeta }: { ssrMeta?: any }) {
             </div>
           </section>
 
-          {/* â”€â”€ PROCESS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── PROCESS ───────────────────── */}
           <section className="section">
             <div className="container-main">
               <div style={{ textAlign: 'center', marginBottom: 60 }}>
@@ -233,7 +233,7 @@ export default function ServicesPage({ ssrMeta }: { ssrMeta?: any }) {
             </div>
           </section>
 
-          {/* â”€â”€ CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── CTA ──────────────────────── */}
           <section style={{ padding: '80px 0', textAlign: 'center', background: 'linear-gradient(135deg, rgba(201,168,76,0.06), rgba(0,212,255,0.03))' }}>
             <div className="container-main">
               <Zap size={40} color="#C9A84C" style={{ margin: '0 auto 20px' }} />

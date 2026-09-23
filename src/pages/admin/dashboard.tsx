@@ -23,6 +23,7 @@ interface SessionDetail {
   session_id: string;
   ip: string;
   location: string;
+  referrer: string;
   device: string;
   browser: string;
   os: string;
@@ -49,14 +50,29 @@ interface Stats {
 
 function timeAgo(timestamp: string): string {
   if (!timestamp) return 'unknown';
-  const diff = Date.now() - new Date(timestamp).getTime();
-  const secs = Math.floor(diff / 1000);
-  if (secs < 10) return 'just now';
-  if (secs < 60) return `${secs}s ago`;
-  const mins = Math.floor(secs / 60);
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.floor(mins / 60);
-  return `${hours}h ago`;
+  const seconds = Math.floor((new Date().getTime() - new Date(timestamp).getTime()) / 1000);
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+}
+
+function formatReferrer(url: string): { label: string, color: string } {
+  if (!url || url === 'Direct') return { label: 'Direct', color: 'text-gray-400' };
+  try {
+    const hostname = new URL(url).hostname.toLowerCase();
+    if (hostname.includes('google')) return { label: 'Google Search', color: 'text-blue-400' };
+    if (hostname.includes('facebook') || hostname.includes('fb.com')) return { label: 'Facebook', color: 'text-blue-500' };
+    if (hostname.includes('youtube')) return { label: 'YouTube', color: 'text-red-500' };
+    if (hostname.includes('linkedin')) return { label: 'LinkedIn', color: 'text-blue-300' };
+    if (hostname.includes('twitter') || hostname.includes('t.co')) return { label: 'Twitter / X', color: 'text-neutral-300' };
+    if (hostname.includes('instagram')) return { label: 'Instagram', color: 'text-pink-400' };
+    return { label: hostname.replace(/^www\./, ''), color: 'text-emerald-400' };
+  } catch {
+    return { label: url, color: 'text-gray-400' };
+  }
 }
 
 function pageName(path: string): string {
@@ -87,7 +103,7 @@ export default function AnalyticsDashboard() {
   useEffect(() => {
     if (!hasAuthCookie()) { router.push('/admin'); return; }
     fetchStats();
-    pollRef.current = setInterval(fetchStats, 10000);
+    pollRef.current = setInterval(fetchStats, 3000);
     return () => { if (pollRef.current) clearInterval(pollRef.current); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -269,10 +285,11 @@ export default function AnalyticsDashboard() {
               {/* Header row */}
               <div className="hidden md:grid grid-cols-12 gap-2 px-3 pb-2 border-b border-white/5 text-[10px] text-textSecondary uppercase tracking-wider font-bold">
                 <div className="col-span-1">Status</div>
-                <div className="col-span-2">Location</div>
-                <div className="col-span-3">Current / Last Page</div>
+                <div className="col-span-2">IP / Location</div>
+                <div className="col-span-2">Source</div>
+                <div className="col-span-2">Current Page</div>
                 <div className="col-span-2">Device / OS</div>
-                <div className="col-span-2">Time Spent</div>
+                <div className="col-span-1">Time</div>
                 <div className="col-span-1">Last Active</div>
                 <div className="col-span-1">Pages</div>
               </div>
@@ -292,37 +309,45 @@ export default function AnalyticsDashboard() {
                       <span className={`w-2.5 h-2.5 rounded-full ${session.is_live ? 'bg-emerald-500 animate-pulse' : 'bg-white/20'}`}></span>
                     </div>
 
-                    {/* Location */}
-                    <div className="col-span-2 text-xs text-white font-semibold truncate">
-                      {session.location}
+                    {/* IP / Location */}
+                    <div className="col-span-2 flex flex-col justify-center">
+                      <span className="text-xs text-white font-semibold truncate">{session.location}</span>
+                      <span className="text-[10px] text-textSecondary font-mono truncate">{session.ip !== '::1' && session.ip !== '127.0.0.1' ? session.ip : 'Localhost'}</span>
+                    </div>
+
+                    {/* Source */}
+                    <div className="col-span-2 flex items-center">
+                      <span className={`text-[11px] font-semibold truncate ${formatReferrer(session.referrer).color}`}>
+                        {formatReferrer(session.referrer).label}
+                      </span>
                     </div>
 
                     {/* Current Page */}
-                    <div className="col-span-3 text-xs text-[#B76E79] font-mono truncate">
+                    <div className="col-span-2 text-xs font-mono text-[#B76E79] truncate">
                       {session.current_page}
                     </div>
 
                     {/* Device / OS */}
-                    <div className="col-span-2 text-[10px] text-textSecondary truncate">
-                      {session.device} · {session.os}
+                    <div className="col-span-2 text-[11px] text-textSecondary truncate">
+                      {session.device} &middot; {session.os}
                     </div>
 
                     {/* Time Spent */}
-                    <div className="col-span-2 text-xs text-[#F4C27F] font-bold font-mono">
+                    <div className="col-span-1 text-xs text-[#F4C27F] font-mono">
                       {session.time_spent}
                     </div>
 
                     {/* Last Active */}
-                    <div className="col-span-1 text-[10px] text-textSecondary whitespace-nowrap">
+                    <div className="col-span-1 text-[11px] text-textSecondary truncate">
                       {timeAgo(session.last_active)}
                     </div>
 
-                    {/* Pages visited count */}
-                    <div className="col-span-1 flex items-center justify-end gap-1 text-[10px] text-textSecondary">
-                      <span className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10">
+                    {/* Pages */}
+                    <div className="col-span-1 flex items-center justify-between pl-2">
+                      <div className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-xs font-mono text-white">
                         {session.history.length}p
-                      </span>
-                      <ChevronRight className={`w-3 h-3 transition-transform ${expandedSession === session.session_id ? 'rotate-90' : ''}`} />
+                      </div>
+                      <ChevronRight className={`w-3.5 h-3.5 text-white/30 transition-transform ${expandedSession === session.session_id ? 'rotate-90' : ''}`} />
                     </div>
                   </div>
 

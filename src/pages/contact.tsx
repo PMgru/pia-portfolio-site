@@ -24,9 +24,9 @@ export default function ContactPage({ ssrMeta }: { ssrMeta?: any }) {
   ]);
   const [budgetOptions, setBudgetOptions] = useState<string[]>([
     'Under $500',
-    '$500 â€“ $1,000',
-    '$1,000 â€“ $2,500',
-    '$2,500 â€“ $5,000',
+    '$500 – $1,000',
+    '$1,000 – $2,500',
+    '$2,500 – $5,000',
     '$5,000+',
   ]);
 
@@ -35,7 +35,7 @@ export default function ContactPage({ ssrMeta }: { ssrMeta?: any }) {
     phone: '+880 1XXX-XXXXXX',
     whatsappUrl: 'https://wa.me/8801XXXXXXXXX',
     location: 'Dhaka, Bangladesh',
-    availability: 'Monâ€“Fri, 9amâ€“6pm (BST)',
+    availability: 'Mon–Fri, 9am–6pm (BST)',
     linkedin: 'https://linkedin.com/in/pialmahmud',
   });
 
@@ -47,7 +47,7 @@ export default function ContactPage({ ssrMeta }: { ssrMeta?: any }) {
         phone: s.phone || '+880 1XXX-XXXXXX',
         whatsappUrl: s.whatsapp_url || 'https://wa.me/8801XXXXXXXXX',
         location: s.location || 'Dhaka, Bangladesh',
-        availability: s.availability || 'Monâ€“Fri, 9amâ€“6pm (BST)',
+        availability: s.availability || 'Mon–Fri, 9am–6pm (BST)',
         linkedin: s.linkedin_url || 'https://linkedin.com/in/pialmahmud',
       });
       // Load dynamic services from admin
@@ -104,7 +104,7 @@ export default function ContactPage({ ssrMeta }: { ssrMeta?: any }) {
     <>
       <SEO
         slug="contact"
-        fallbackTitle="Contact Pial Mahmud â€” Start Your Growth Journey Today"
+        fallbackTitle="Contact Pial Mahmud — Start Your Growth Journey Today"
         fallbackDescription="Get in touch with Pial Mahmud for digital marketing, SEO, and AI-powered growth strategies. Free consultation, 24-hour response time."
         fallbackKeywords="Hire SEO Expert, Digital Marketing Consultation, Technical SEO Audit Request, Contact Pial Mahmud"
               ssrMeta={ssrMeta}
@@ -116,7 +116,7 @@ export default function ContactPage({ ssrMeta }: { ssrMeta?: any }) {
 
         <main style={{ position: 'relative', zIndex: 1, paddingTop: 100 }}>
 
-          {/* â”€â”€ PAGE HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── PAGE HERO ─────────────────── */}
           <section style={{ padding: '80px 0 60px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
             <div className="container-main">
               <div className="section-label" style={{ justifyContent: 'center' }}>Let's Connect</div>
@@ -131,18 +131,18 @@ export default function ContactPage({ ssrMeta }: { ssrMeta?: any }) {
             </div>
           </section>
 
-          {/* â”€â”€ CONTACT MAIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ── CONTACT MAIN ──────────────── */}
           <section className="section">
             <div className="container-main">
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 60, alignItems: 'start' }}>
 
-                {/* Left â€” Info */}
+                {/* Left — Info */}
                 <div>
                   <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 28, fontWeight: 700, color: '#F0F2F8', marginBottom: 16 }}>
                     Get In Touch
                   </h2>
                   <p style={{ fontSize: 14, color: '#6B7A99', lineHeight: 1.8, marginBottom: 36 }}>
-                    Whether you're looking to scale your SEO, launch a campaign, or discuss an AI marketing strategy â€” 
+                    Whether you're looking to scale your SEO, launch a campaign, or discuss an AI marketing strategy — 
                     I'm here to help. Let's talk.
                   </p>
 
@@ -208,11 +208,11 @@ export default function ContactPage({ ssrMeta }: { ssrMeta?: any }) {
                   </div>
                 </div>
 
-                {/* Right â€” Form */}
+                {/* Right — Form */}
                 <div className="card" style={{ padding: 40 }}>
                   {submitted ? (
                     <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                      <div style={{ fontSize: 60, marginBottom: 20 }}>ðŸŽ‰</div>
+                      <div style={{ fontSize: 60, marginBottom: 20 }}>🎉</div>
                       <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: 28, fontWeight: 700, color: '#F0F2F8', marginBottom: 12 }}>
                         Message Received!
                       </h3>
@@ -303,7 +303,7 @@ export default function ContactPage({ ssrMeta }: { ssrMeta?: any }) {
                         />
                       </div>
 
-                      {/* Honeypot field â€” hidden from real users, catches bots. */}
+                      {/* Honeypot field — hidden from real users, catches bots. */}
                       <input
                         type="text"
                         name="website"
