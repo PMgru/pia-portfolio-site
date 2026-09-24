@@ -241,7 +241,7 @@ export default function HomePage({ ssrMeta }: HomePageProps) {
       element.style.padding = '20px';
 
       const hostname = new URL(auditResult.url).hostname || 'audit';
-      const opt = {
+      const opt: any = {
         margin:       10,
         filename:     `SEO-Audit-Report-${hostname}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
