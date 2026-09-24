@@ -2,11 +2,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { JsonDb } from '@/lib/db';
 import { requireAdmin } from '@/lib/auth';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
 
   if (req.method === 'GET') {
-    const workItems = JsonDb.getCollection('work_items');
+    const workItems = await JsonDb.getCollection('work_items');
     return res.status(200).json(workItems);
   }
 
@@ -17,7 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!requireAdmin(req, res)) return;
 
   if (req.method === 'POST') {
-    const newItem = JsonDb.insert('work_items', req.body);
+    const newItem = await JsonDb.insert('work_items', req.body);
     return res.status(201).json(newItem);
   }
 
@@ -25,7 +25,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!id || typeof id !== 'string') {
       return res.status(400).json({ message: 'Missing ID' });
     }
-    const success = JsonDb.update('work_items', id, req.body);
+    const success = await JsonDb.update('work_items', id, req.body);
     if (!success) return res.status(404).json({ message: 'Work item not found' });
     return res.status(200).json({ message: 'Work item updated successfully' });
   }
@@ -34,7 +34,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!id || typeof id !== 'string') {
       return res.status(400).json({ message: 'Missing ID' });
     }
-    const success = JsonDb.delete('work_items', id);
+    const success = await JsonDb.delete('work_items', id);
     if (!success) return res.status(404).json({ message: 'Work item not found' });
     return res.status(200).json({ message: 'Work item deleted' });
   }

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { JsonDb } from '@/lib/db';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { action } = req.query;
 
   // Track page hit
@@ -21,7 +21,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       timestamp: new Date().toISOString()
     };
 
-    JsonDb.insert('analytics_events', event);
+    await JsonDb.insert('analytics_events', event);
     return res.status(200).json({ success: true });
   }
 
@@ -32,7 +32,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ message: 'session_id is required' });
     }
 
-    const events = JsonDb.getCollection('analytics_events');
+    const events = await JsonDb.getCollection('analytics_events');
     const existing = events.find(e => e.session_id === session_id && e.event_type === 'pageview');
 
     const event = {
@@ -48,13 +48,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       timestamp: new Date().toISOString()
     };
 
-    JsonDb.insert('analytics_events', event);
+    await JsonDb.insert('analytics_events', event);
     return res.status(200).json({ success: true });
   }
 
   // Get stats for Admin Dashboard
   if (req.method === 'GET' && action === 'stats') {
-    const events = JsonDb.getCollection('analytics_events');
+    const events = await JsonDb.getCollection('analytics_events');
 
     // Filter pageviews and pings separately
     const pageviews = events.filter(e => e.event_type === 'pageview');

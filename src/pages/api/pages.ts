@@ -3,11 +3,11 @@ import { JsonDb } from '@/lib/db';
 import { requireAdmin } from '@/lib/auth';
 import { sanitizeHtml } from '@/lib/sanitize';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { slug } = req.query;
 
   if (req.method === 'GET') {
-    const pages = JsonDb.getCollection('pages');
+    const pages = await JsonDb.getCollection('pages');
     if (slug) {
       const page = pages.find(p => p.slug === slug);
       if (!page) return res.status(404).json({ message: 'Page not found' });
@@ -27,7 +27,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const payloadSlug = req.body?.slug;
     if (!id && !slug && !payloadSlug) return res.status(400).json({ message: 'Missing page identifiers' });
 
-    const pages = JsonDb.getCollection('pages');
+    const pages = await JsonDb.getCollection('pages');
     const pageId = id || pages.find(p => p.slug === slug)?.id;
 
     if (!pageId) {
@@ -37,7 +37,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         insertPayload.slug = sanitizeSlug(insertPayload.title);
       }
       if (typeof insertPayload.content === 'string') insertPayload.content = sanitizeHtml(insertPayload.content);
-      const newPage = JsonDb.insert('pages', insertPayload);
+      const newPage = await JsonDb.insert('pages', insertPayload);
       return res.status(201).json(newPage);
     }
 
@@ -64,7 +64,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       content: updatedFields.content || ''
     });
 
-    JsonDb.update('pages', pageId, {
+    await JsonDb.update('pages', pageId, {
       ...updatedFields,
       seo_score: score
     });

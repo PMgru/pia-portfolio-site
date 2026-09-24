@@ -3,17 +3,17 @@ import { JsonDb } from '@/lib/db';
 import { requireAdmin } from '@/lib/auth';
 import { sanitizeHtml } from '@/lib/sanitize';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id, slug } = req.query;
 
   if (req.method === 'GET') {
-    const blogPosts = JsonDb.getCollection('blog_posts');
+    const blogPosts = await JsonDb.getCollection('blog_posts');
     if (slug) {
       const post = blogPosts.find(b => b.slug === slug);
       if (!post) return res.status(404).json({ message: 'Post not found' });
       // Increment views count
       post.views = (post.views || 0) + 1;
-      JsonDb.update('blog_posts', post.id, { views: post.views });
+      await JsonDb.update('blog_posts', post.id, { views: post.views });
       return res.status(200).json(post);
     }
     if (id) {
@@ -36,7 +36,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       ? normalizeSlug(slug)
       : normalizeSlug(title || 'blog-post');
 
-    const newPost = JsonDb.insert('blog_posts', {
+    const newPost = await JsonDb.insert('blog_posts', {
       title,
       slug: postSlug,
       excerpt,
@@ -68,7 +68,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     } else {
       delete payload.slug;
     }
-    const success = JsonDb.update('blog_posts', id, payload);
+    const success = await JsonDb.update('blog_posts', id, payload);
     if (!success) return res.status(404).json({ message: 'Blog post not found' });
     return res.status(200).json({ message: 'Blog updated successfully' });
   }
@@ -77,7 +77,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!id || typeof id !== 'string') {
       return res.status(400).json({ message: 'Missing ID' });
     }
-    const success = JsonDb.delete('blog_posts', id);
+    const success = await JsonDb.delete('blog_posts', id);
     if (!success) return res.status(404).json({ message: 'Blog post not found' });
     return res.status(200).json({ message: 'Blog deleted successfully' });
   }

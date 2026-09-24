@@ -7,14 +7,14 @@ import { requireAdmin } from '@/lib/auth';
 // PUT  /api/settings            → set one or many { key: value } pairs (admin)
 // PUT  /api/settings?section=stats → replace a home_content section's data (admin)
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const settings = JsonDb.getAllSettings();
+    const settings = await JsonDb.getAllSettings();
     const includeHome = req.query.home !== undefined;
     if (!includeHome) {
       return res.status(200).json(settings);
     }
-    const homeSections = JsonDb.getCollection('home_content');
+    const homeSections = await JsonDb.getCollection('home_content');
     const home: Record<string, any> = {};
     for (const s of homeSections) home[s.section] = s.data;
     return res.status(200).json({ settings, home });
@@ -32,13 +32,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (data === undefined) {
       return res.status(400).json({ message: 'Missing "data" for section' });
     }
-    const sections = JsonDb.getCollection('home_content');
+    const sections = await JsonDb.getCollection('home_content');
     const index = sections.findIndex((s: any) => s.section === section);
     if (index === -1) {
-      JsonDb.insert('home_content', { section, data });
+      await JsonDb.insert('home_content', { section, data });
     } else {
       sections[index] = { ...sections[index], data, updated_at: new Date().toISOString() };
-      JsonDb.saveCollection('home_content', sections);
+      await JsonDb.saveCollection('home_content', sections);
     }
     return res.status(200).json({ message: 'Section updated', section });
   }
@@ -50,7 +50,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json({ message: 'No settings provided' });
   }
   for (const [key, value] of Object.entries(body)) {
-    JsonDb.setSetting(key, value);
+    await JsonDb.setSetting(key, value);
   }
   return res.status(200).json({ message: 'Settings updated' });
 }

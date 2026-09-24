@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     lastSubmitByIp.set(ip, now);
 
-    const newMessage = JsonDb.insert('contact_messages', {
+    const newMessage = await JsonDb.insert('contact_messages', {
       name: String(name).slice(0, 120),
       email: String(email).slice(0, 160),
       company: company ? String(company).slice(0, 160) : '',
@@ -67,7 +67,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // ─── ADMIN: list messages ───────────────────────────────────────────────────
   if (req.method === 'GET') {
-    const messages = JsonDb.getCollection('contact_messages');
+    const messages = await JsonDb.getCollection('contact_messages');
     // Newest first.
     messages.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     const unread = messages.filter(m => !m.is_read).length;
@@ -80,7 +80,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ message: 'Missing message ID' });
     }
     const is_read = req.body?.is_read === true || req.query.read === 'true';
-    const success = JsonDb.update('contact_messages', id, { is_read, status: is_read ? 'read' : 'new' });
+    const success = await JsonDb.update('contact_messages', id, { is_read, status: is_read ? 'read' : 'new' });
     if (!success) return res.status(404).json({ message: 'Message not found' });
     return res.status(200).json({ message: 'Updated' });
   }
@@ -90,7 +90,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!id || typeof id !== 'string') {
       return res.status(400).json({ message: 'Missing message ID' });
     }
-    const success = JsonDb.delete('contact_messages', id);
+    const success = await JsonDb.delete('contact_messages', id);
     if (!success) return res.status(404).json({ message: 'Message not found' });
     return res.status(200).json({ message: 'Message deleted' });
   }

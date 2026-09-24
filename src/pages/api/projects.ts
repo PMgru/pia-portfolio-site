@@ -3,11 +3,11 @@ import { JsonDb } from '@/lib/db';
 import { requireAdmin } from '@/lib/auth';
 import { sanitizeHtml } from '@/lib/sanitize';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id, slug } = req.query;
 
   if (req.method === 'GET') {
-    const projects = JsonDb.getCollection('projects');
+    const projects = await JsonDb.getCollection('projects');
     if (slug) {
       const project = projects.find(p => p.slug === slug || p.case_study === slug);
       if (!project) return res.status(404).json({ message: 'Project not found' });
@@ -36,7 +36,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     payload.case_study = normalizedSlug;
     if (typeof payload.results === 'string') payload.results = sanitizeHtml(payload.results);
     if (typeof payload.solution === 'string') payload.solution = sanitizeHtml(payload.solution);
-    const newProject = JsonDb.insert('projects', payload);
+    const newProject = await JsonDb.insert('projects', payload);
     return res.status(201).json(newProject);
   }
 
@@ -53,7 +53,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     } else {
       delete payload.slug;
     }
-    const success = JsonDb.update('projects', id, payload);
+    const success = await JsonDb.update('projects', id, payload);
     if (!success) return res.status(404).json({ message: 'Project not found' });
     return res.status(200).json({ message: 'Project updated successfully' });
   }
@@ -62,7 +62,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!id || typeof id !== 'string') {
       return res.status(400).json({ message: 'Missing project ID' });
     }
-    const success = JsonDb.delete('projects', id);
+    const success = await JsonDb.delete('projects', id);
     if (!success) return res.status(404).json({ message: 'Project not found' });
     return res.status(200).json({ message: 'Project deleted successfully' });
   }

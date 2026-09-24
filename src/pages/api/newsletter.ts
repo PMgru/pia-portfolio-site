@@ -24,12 +24,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   lastByIp.set(ip, now);
 
   // Avoid duplicate subscriptions.
-  const subs = JsonDb.getCollection('newsletter_subs');
+  const subs = await JsonDb.getCollection('newsletter_subs');
   const exists = subs.some((s: any) => s.email.toLowerCase() === String(email).toLowerCase());
   if (exists) {
     return res.status(200).json({ success: true, message: 'Already subscribed' });
   }
 
-  JsonDb.insert('newsletter_subs', { email: String(email).slice(0, 160).toLowerCase(), source: 'footer' });
+  await JsonDb.insert('newsletter_subs', { email: String(email).slice(0, 160).toLowerCase(), source: 'footer' });
   return res.status(201).json({ success: true, message: 'Subscribed successfully' });
 }

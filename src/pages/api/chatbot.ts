@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       : '';
     const apiKey = requestKey || GEMINI_API_KEY;
 
-    const knowledge = JsonDb.getCollection('chatbot_knowledge');
+    const knowledge = await JsonDb.getCollection('chatbot_knowledge');
 
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
@@ -165,7 +165,7 @@ Pial's Assistant:`;
   // Knowledge base CRUD (Admin only). GET stays public so the chatbot widget
   // and admin can read entries; every mutation requires an admin session.
   if (req.method === 'GET') {
-    const knowledge = JsonDb.getCollection('chatbot_knowledge');
+    const knowledge = await JsonDb.getCollection('chatbot_knowledge');
     return res.status(200).json(knowledge);
   }
 
@@ -175,7 +175,7 @@ Pial's Assistant:`;
   if (!requireAdmin(req, res)) return;
 
   if (req.method === 'POST') {
-    const newK = JsonDb.insert('chatbot_knowledge', req.body);
+    const newK = await JsonDb.insert('chatbot_knowledge', req.body);
     return res.status(201).json(newK);
   }
 
@@ -183,7 +183,7 @@ Pial's Assistant:`;
     if (!id || typeof id !== 'string') {
       return res.status(400).json({ message: 'Missing ID' });
     }
-    const success = JsonDb.update('chatbot_knowledge', id, req.body);
+    const success = await JsonDb.update('chatbot_knowledge', id, req.body);
     if (!success) return res.status(404).json({ message: 'Knowledge entry not found' });
     return res.status(200).json({ message: 'Knowledge updated successfully' });
   }
@@ -192,7 +192,7 @@ Pial's Assistant:`;
     if (!id || typeof id !== 'string') {
       return res.status(400).json({ message: 'Missing ID' });
     }
-    const success = JsonDb.delete('chatbot_knowledge', id);
+    const success = await JsonDb.delete('chatbot_knowledge', id);
     if (!success) return res.status(404).json({ message: 'Knowledge entry not found' });
     return res.status(200).json({ message: 'Knowledge deleted successfully' });
   }

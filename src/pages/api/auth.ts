@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ message: 'Email and password are required' });
   }
 
-  const users = JsonDb.getCollection('users');
+  const users = await JsonDb.getCollection('users');
   const user = users.find((u: any) => u.email.toLowerCase() === String(email).toLowerCase());
 
   // Constant-ish timing: always run a bcrypt compare even when the user is
