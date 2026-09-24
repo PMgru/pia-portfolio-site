@@ -225,6 +225,44 @@ export default function HomePage({ ssrMeta }: HomePageProps) {
     }
   };
 
+  const handleDownloadPdf = async () => {
+    try {
+      const element = document.querySelector('.audit-result-container') as HTMLElement;
+      if (!element) return;
+      
+      // Hide the download button during PDF generation
+      const downloadBtn = element.querySelector('.download-report-btn') as HTMLElement;
+      if (downloadBtn) downloadBtn.style.display = 'none';
+
+      // Add temporary styling for the PDF
+      const originalBackground = element.style.background;
+      const originalPadding = element.style.padding;
+      element.style.background = '#080B14';
+      element.style.padding = '20px';
+
+      const hostname = new URL(auditResult.url).hostname || 'audit';
+      const opt = {
+        margin:       10,
+        filename:     `SEO-Audit-Report-${hostname}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, backgroundColor: '#080B14', useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      // @ts-ignore
+      const html2pdf = (await import('html2pdf.js')).default;
+      await html2pdf().set(opt).from(element).save();
+
+      // Restore styling and button
+      element.style.background = originalBackground;
+      element.style.padding = originalPadding;
+      if (downloadBtn) downloadBtn.style.display = 'inline-flex';
+
+    } catch (error) {
+      console.error("Failed to generate PDF:", error);
+    }
+  };
+
   // GEO & AEO Optimized Schema Definition
   const schemaData = {
     "@context": "https://schema.org",
@@ -914,7 +952,7 @@ export default function HomePage({ ssrMeta }: HomePageProps) {
 
           {/* Results */}
           {auditResult && (
-            <div style={{ maxWidth: 760, margin: '0 auto' }}>
+            <div className="audit-result-container" style={{ maxWidth: 760, margin: '0 auto' }}>
               {/* Score card */}
               <div style={{
                 display: 'flex', alignItems: 'center', gap: 24,
@@ -937,11 +975,58 @@ export default function HomePage({ ssrMeta }: HomePageProps) {
                   }}>{auditResult.score}</span>
                   <span style={{ fontSize: 9, color: '#6B7A99', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>Score</span>
                 </div>
-                <div style={{ flex: 1 }}>
-                  <p style={{ fontSize: 13, color: '#9AA5B4', wordBreak: 'break-all', marginBottom: 6 }}>{auditResult.url}</p>
-                  <p style={{ fontSize: 14, color: '#F0F2F8', fontWeight: 600 }}>{auditResult.summary}</p>
+                <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+                  <div>
+                    <p style={{ fontSize: 13, color: '#9AA5B4', wordBreak: 'break-all', marginBottom: 6 }}>{auditResult.url}</p>
+                    <p style={{ fontSize: 14, color: '#F0F2F8', fontWeight: 600 }}>{auditResult.summary}</p>
+                  </div>
+                  <button 
+                    onClick={handleDownloadPdf}
+                    className="download-report-btn"
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 20px',
+                      borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+                      color: '#F0F2F8', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
+                    }}
+                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download PDF Report
+                  </button>
                 </div>
               </div>
+
+              {/* Core Web Vitals */}
+              {auditResult.pageSpeed && (
+                <div style={{
+                  marginBottom: 24, padding: '20px 24px', borderRadius: 16,
+                  background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)'
+                }}>
+                  <h3 style={{ fontSize: 16, fontWeight: 700, color: '#F0F2F8', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Zap size={18} style={{ color: '#00D4FF' }} /> Core Web Vitals
+                  </h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 16 }}>
+                    {[
+                      { label: 'Performance', score: auditResult.pageSpeed.performance },
+                      { label: 'Accessibility', score: auditResult.pageSpeed.accessibility },
+                      { label: 'Best Practices', score: auditResult.pageSpeed.bestPractices },
+                      { label: 'SEO', score: auditResult.pageSpeed.seo },
+                    ].map((metric, i) => (
+                      <div key={i} style={{ textAlign: 'center' }}>
+                        <div style={{
+                          width: 60, height: 60, margin: '0 auto 8px', borderRadius: '50%',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          border: `3px solid ${metric.score >= 90 ? '#4ade80' : metric.score >= 50 ? '#F4C27F' : '#E63946'}`
+                        }}>
+                          <span style={{ fontSize: 16, fontWeight: 700, color: '#F0F2F8' }}>{metric.score}</span>
+                        </div>
+                        <div style={{ fontSize: 11, fontWeight: 600, color: '#9AA5B4', textTransform: 'uppercase' }}>{metric.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Checks list */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -983,6 +1068,21 @@ export default function HomePage({ ssrMeta }: HomePageProps) {
                   <span>Get a Free SEO Consultation</span>
                   <ArrowRight size={16} />
                 </Link>
+                
+                {/* Branding Footer for PDF Export */}
+                <div style={{ 
+                  marginTop: 40, paddingTop: 20, 
+                  borderTop: '1px solid rgba(255,255,255,0.05)', 
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center' 
+                }}>
+                   <p style={{ fontSize: 12, color: '#6B7A99', textAlign: 'left', margin: 0 }}>
+                     Report generated by <strong>Pial Mahmud</strong><br/>
+                     Digital Marketing & SEO Expert
+                   </p>
+                   <p style={{ fontSize: 12, color: '#6B7A99', textAlign: 'right', margin: 0 }}>
+                     pialmahmud.com
+                   </p>
+                </div>
               </div>
             </div>
           )}
@@ -990,6 +1090,7 @@ export default function HomePage({ ssrMeta }: HomePageProps) {
       </section>
 
       </main>
+
 
       {/* ── BOTTOM CTA SECTION ────────────────────────────────── */}
       <section style={{

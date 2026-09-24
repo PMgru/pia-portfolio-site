@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -51,17 +51,17 @@ body {
   overflow-x: hidden;
 }
 
-/* ─── SCROLLBAR ─── */
+/* â”€â”€â”€ SCROLLBAR â”€â”€â”€ */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg-primary); }
 ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-/* ─── TYPOGRAPHY ─── */
+/* â”€â”€â”€ TYPOGRAPHY â”€â”€â”€ */
 .font-display { font-family: 'Playfair Display', serif; }
 .font-mono { font-family: 'JetBrains Mono', monospace; }
 
-/* ─── GRADIENT TEXT ─── */
+/* â”€â”€â”€ GRADIENT TEXT â”€â”€â”€ */
 .text-gradient-gold {
   background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #C9A84C 100%);
   -webkit-background-clip: text;
@@ -75,7 +75,7 @@ body {
   background-clip: text;
 }
 
-/* ─── BUTTONS ─── */
+/* â”€â”€â”€ BUTTONS â”€â”€â”€ */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -128,7 +128,7 @@ body {
   box-shadow: 0 10px 30px rgba(201,168,76,0.15);
 }
 
-/* ─── CARDS ─── */
+/* â”€â”€â”€ CARDS â”€â”€â”€ */
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
@@ -154,7 +154,7 @@ body {
   box-shadow: 0 24px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.1);
 }
 
-/* ─── SECTION HEADER ─── */
+/* â”€â”€â”€ SECTION HEADER â”€â”€â”€ */
 .section-label {
   display: inline-flex;
   align-items: center;
@@ -175,7 +175,7 @@ body {
   opacity: 0.5;
 }
 
-/* ─── PARTICLES CANVAS ─── */
+/* â”€â”€â”€ PARTICLES CANVAS â”€â”€â”€ */
 #particles-canvas {
   position: fixed;
   top: 0; left: 0;
@@ -185,7 +185,7 @@ body {
   opacity: 0.4;
 }
 
-/* ─── GRID OVERLAY ─── */
+/* â”€â”€â”€ GRID OVERLAY â”€â”€â”€ */
 .grid-overlay {
   position: fixed;
   inset: 0;
@@ -197,7 +197,7 @@ body {
   z-index: 0;
 }
 
-/* ─── GLOW EFFECTS ─── */
+/* â”€â”€â”€ GLOW EFFECTS â”€â”€â”€ */
 .glow-gold {
   box-shadow: 0 0 40px rgba(201,168,76,0.15), 0 0 80px rgba(201,168,76,0.05);
 }
@@ -205,7 +205,7 @@ body {
   box-shadow: 0 0 40px rgba(0,212,255,0.15), 0 0 80px rgba(0,212,255,0.05);
 }
 
-/* ─── ANIMATIONS ─── */
+/* â”€â”€â”€ ANIMATIONS â”€â”€â”€ */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
@@ -282,7 +282,7 @@ body {
 .delay-700 { animation-delay: 0.7s; }
 .delay-800 { animation-delay: 0.8s; }
 
-/* ─── NAVBAR ─── */
+/* â”€â”€â”€ NAVBAR â”€â”€â”€ */
 .navbar {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -295,13 +295,13 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-/* ─── HERO ─── */
+/* â”€â”€â”€ HERO â”€â”€â”€ */
 .hero-gradient {
   background: radial-gradient(ellipse 80% 80% at 50% -10%, rgba(201,168,76,0.12) 0%, transparent 60%),
               radial-gradient(ellipse 60% 60% at 80% 50%, rgba(0,212,255,0.06) 0%, transparent 50%);
 }
 
-/* ─── STATS BAR ─── */
+/* â”€â”€â”€ STATS BAR â”€â”€â”€ */
 .stat-number {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 4vw, 3.5rem);
@@ -310,7 +310,7 @@ body {
   line-height: 1;
 }
 
-/* ─── CLIENT LOGOS ─── */
+/* â”€â”€â”€ CLIENT LOGOS â”€â”€â”€ */
 .client-logo-card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
@@ -330,7 +330,7 @@ body {
   transform: translateY(-3px);
 }
 
-/* ─── CASE STUDY CARD ─── */
+/* â”€â”€â”€ CASE STUDY CARD â”€â”€â”€ */
 .case-study-card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
@@ -344,7 +344,7 @@ body {
   box-shadow: 0 30px 60px rgba(0,0,0,0.5);
 }
 
-/* ─── SERVICE ICON ─── */
+/* â”€â”€â”€ SERVICE ICON â”€â”€â”€ */
 .service-icon-wrap {
   width: 64px;
   height: 64px;
@@ -363,7 +363,7 @@ body {
   box-shadow: 0 8px 24px rgba(201,168,76,0.2);
 }
 
-/* ─── PROGRESS BAR ─── */
+/* â”€â”€â”€ PROGRESS BAR â”€â”€â”€ */
 .skill-bar {
   height: 4px;
   background: rgba(255,255,255,0.05);
@@ -378,7 +378,7 @@ body {
   transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ─── FORM INPUTS ─── */
+/* â”€â”€â”€ FORM INPUTS â”€â”€â”€ */
 .form-input {
   width: 100%;
   padding: 14px 16px;
@@ -398,7 +398,7 @@ body {
   box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
 }
 
-/* ─── BADGE ─── */
+/* â”€â”€â”€ BADGE â”€â”€â”€ */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -424,19 +424,19 @@ body {
   border: 1px solid rgba(16,185,129,0.2);
 }
 
-/* ─── DIVIDER ─── */
+/* â”€â”€â”€ DIVIDER â”€â”€â”€ */
 .divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--border), transparent);
   margin: 2px 0;
 }
 
-/* ─── SECTION SPACING ─── */
+/* â”€â”€â”€ SECTION SPACING â”€â”€â”€ */
 .section { padding: 100px 0; position: relative; }
 .section-sm { padding: 60px 0; position: relative; }
 .container-main { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-/* ─── ADMIN ─── */
+/* â”€â”€â”€ ADMIN â”€â”€â”€ */
 .admin-sidebar {
   background: var(--bg-surface);
   border-right: 1px solid var(--border);
@@ -477,7 +477,7 @@ body {
   padding-left: 17px;
 }
 
-/* ─── LOADING SCREEN ─── */
+/* â”€â”€â”€ LOADING SCREEN â”€â”€â”€ */
 .loading-screen {
   position: fixed;
   inset: 0;
@@ -490,7 +490,7 @@ body {
   gap: 24px;
 }
 
-/* ─── RESPONSIVE ─── */
+/* â”€â”€â”€ RESPONSIVE â”€â”€â”€ */
 @media (max-width: 768px) {
   .section { padding: 60px 0; }
   .section-sm { padding: 40px 0; }
@@ -510,7 +510,7 @@ body {
   }
 }
 
-/* ─── RESPONSIVE GRID UTILITIES ─── */
+/* â”€â”€â”€ RESPONSIVE GRID UTILITIES â”€â”€â”€ */
 .grid-2col {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -528,7 +528,7 @@ body {
   grid-template-columns: repeat(5, 1fr);
 }
 
-/* Tablet — collapse wider grids */
+/* Tablet â€” collapse wider grids */
 @media (max-width: 1024px) {
   .grid-4col { grid-template-columns: repeat(2, 1fr) !important; }
   .grid-5col { grid-template-columns: repeat(3, 1fr) !important; }
@@ -539,7 +539,7 @@ body {
   .grid-5col  { grid-template-columns: repeat(2, 1fr) !important; }
 }
 
-/* Mobile — everything single column */
+/* Mobile â€” everything single column */
 @media (max-width: 640px) {
   .grid-2col  { grid-template-columns: 1fr !important; }
   .grid-3col  { grid-template-columns: 1fr !important; }
@@ -547,7 +547,7 @@ body {
   .grid-5col  { grid-template-columns: 1fr !important; }
 }
 
-/* ─── GLOBAL MOBILE RESPONSIVENESS ─────────────────────────────── */
+/* â”€â”€â”€ GLOBAL MOBILE RESPONSIVENESS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 /* Fix any inline grid layouts that break on mobile */
 @media (max-width: 768px) {
@@ -567,7 +567,7 @@ body {
     grid-template-columns: 1fr !important;
   }
 
-  /* Stat numbers – scale down */
+  /* Stat numbers â€“ scale down */
   .stat-number { font-size: clamp(1.5rem, 6vw, 2.5rem) !important; }
 
   /* Ensure text doesn't overflow */
@@ -584,15 +584,15 @@ body {
   }
 }
 
-/* ─── MOBILE HERO PATCHES ──────────────────────────────────────── */
+/* â”€â”€â”€ MOBILE HERO PATCHES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 768px) {
   /* Typing text size */
   .hero-typing { font-size: clamp(2rem, 8vw, 3rem) !important; }
 
-  /* Profile image in hero – smaller */
+  /* Profile image in hero â€“ smaller */
   .hero-profile-img { max-width: 240px !important; margin: 0 auto; }
 
-  /* Chatbot widget – stay in corner */
+  /* Chatbot widget â€“ stay in corner */
   #chatbot-widget { bottom: 16px !important; right: 16px !important; }
 
   /* Ensure images don't overflow */

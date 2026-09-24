@@ -192,7 +192,9 @@ export default function AboutPage({ ssrMeta }: { ssrMeta?: any }) {
                     </Link>
                     <a
                       href="/pial-mahmud-cv.pdf"
-                      onClick={handleCvDownload}
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="btn-outline"
                       style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}
                     >
